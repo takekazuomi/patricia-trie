@@ -11,7 +11,7 @@ func TestNew(t *testing.T) {
 	t.Parallel()
 
 	trie := New()
-	
+
 	assert.NotNil(t, trie)
 	assert.NotNil(t, trie.root)
 	assert.False(t, trie.root.isEndOfKey)
@@ -42,9 +42,9 @@ func TestTrie_Insert(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			
+
 			trie := New()
-			
+
 			for _, key := range tt.keys {
 				err := trie.Insert(key)
 				require.NoError(t, err)
@@ -58,13 +58,13 @@ func TestTrie_Search(t *testing.T) {
 
 	trie := New()
 	keys := []string{"cat", "cats", "dog", "dogs"}
-	
+
 	// キーを挿入
 	for _, key := range keys {
 		err := trie.Insert(key)
 		require.NoError(t, err)
 	}
-	
+
 	tests := []struct {
 		name     string
 		key      string
@@ -78,11 +78,11 @@ func TestTrie_Search(t *testing.T) {
 		{"存在しないキー: elephant", "elephant", false},
 		{"空文字列", "", false},
 	}
-	
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			
+
 			result := trie.Search(tt.key)
 			assert.Equal(t, tt.expected, result)
 		})
@@ -94,20 +94,20 @@ func TestTrie_Delete(t *testing.T) {
 
 	trie := New()
 	keys := []string{"cat", "cats", "dog"}
-	
+
 	// キーを挿入
 	for _, key := range keys {
 		err := trie.Insert(key)
 		require.NoError(t, err)
 	}
-	
+
 	// 削除テスト
 	err := trie.Delete("cat")
 	require.NoError(t, err)
-	
+
 	// 削除されたキーは見つからない
 	assert.False(t, trie.Search("cat"))
-	
+
 	// 他のキーは残っている
 	assert.True(t, trie.Search("cats"))
 	assert.True(t, trie.Search("dog"))
@@ -118,13 +118,13 @@ func TestTrie_FindByPrefix(t *testing.T) {
 
 	trie := New()
 	keys := []string{"cat", "cats", "dog", "dogs", "elephant"}
-	
+
 	// キーを挿入
 	for _, key := range keys {
 		err := trie.Insert(key)
 		require.NoError(t, err)
 	}
-	
+
 	tests := []struct {
 		name     string
 		prefix   string
@@ -151,11 +151,11 @@ func TestTrie_FindByPrefix(t *testing.T) {
 			expected: []string{},
 		},
 	}
-	
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			
+
 			result := trie.FindByPrefix(tt.prefix)
 			assert.ElementsMatch(t, tt.expected, result)
 		})
