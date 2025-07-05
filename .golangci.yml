@@ -1,0 +1,81 @@
+version: "2"
+
+linters:
+  default: all
+
+  disable:
+    - depguard          # stdlibだけに限定できないので無効化
+    - testpackage       # テストを同一パッケージに入れることにするので無効化
+    - wrapcheck         # 便利そうだけど、wrapは使わないので、stacktrace使うので、無効化
+    - wsl               # うるさ過ぎるので無効化
+    - gosmopolitan      # 日本語リテラルを許可したいので、無効化
+    - gochecknoinits    # cli では、inits functions は便利なので無効化
+    - varnamelen        # スコープが狭い変数は短い名前にすべきなので無効化
+    - godot             # 日本語のコメントはピリオドを使用しないので無効化
+    - gochecknoglobals  # global 変数を使用してもいいので無効化
+    - revive            # 現状のスタイルは必要なものだけ書く文化なので無効化
+    - ireturn           # ジェネリクスを使っているので無効化
+
+
+  settings:
+    errcheck:
+      check-type-assertions: true
+    exhaustruct:
+      include:
+        # No zero values for param structs.
+        - 'grpc-errors\..*[pP]arams'
+    # forbidigo:
+    #   forbid:
+    #     # Unlike most Buf projects, we're allowing the standard library's log
+    #     # package: this is a demo service, so let's keep it simple.
+    #     - pattern: '^fmt\.Print'
+    #     - pattern: '^print$'
+    #     - pattern: '^println$'
+    #     - pattern: '^panic$'
+    godox:
+      # TODO, OPT, etc. comments are fine to commit. Use FIXME comments for
+      # temporary hacks, and use godox to prevent committing them.
+      keywords: [FIXME]
+    gomoddirectives:
+      replace-allow-list: 
+        - github.com/plusmedi/mhv2-backends/pkg/slog/logger
+    # 最近のディスプレイは広くなっているので、120から150へ変更。
+    lll:
+      line-length: 150
+      tab-width: 4
+    # カラム数制限を付けたら行が溢れたのでとりあえず80に設定
+    funlen:
+      lines: 80
+      statements: 40
+      ignore-comments: true
+    # 10だと超えてしまうので、15に設定
+    cyclop:
+      max-complexity: 15
+
+  exclusions:
+    warn-unused: true
+    rules:
+      # Don't ban use of fmt.Errorf to create new errors, but the remaining
+      # checks from err113 are useful.
+      - path: '(.+)\.go$'
+        text: "do not define dynamic errors.*"
+      - linters: [staticcheck]
+        text: "SA1019: .*PatientAssignment.*"
+      - linters: [funlen]
+        path: ".*_test\\.go$"
+      
+formatters:
+  # Enable specific formatter.
+  # Default: [] (uses standard Go formatting)
+  settings:
+    gci:
+      sections:
+        - standard # Standard section: captures all standard packages.
+        - default # Default section: contains all imports that could not be matched to another section type.
+        - prefix(grpc-errors) # Custom section: groups all imports with the specified Prefix.
+
+output:
+  formats:
+    text:
+      print-issued-lines: true
+      print-linter-name: true
