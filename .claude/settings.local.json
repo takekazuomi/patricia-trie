@@ -13,6 +13,16 @@
       "Bash(direnv allow:*)",
       "Bash(source:*)",
       "Bash(golangci-lint run:*)",
+      "WebFetch(domain:tech.davis-hansson.com)",
+      "Bash(command make check)",
+      "Bash(command make benchmark)",
+      "Bash(git add:*)",
+      "Bash(make test:*)",
+      "Bash(make lint)",
+      "Bash(go test:*)",
+      "Bash(direnv allow:*)",
+      "Bash(source:*)",
+      "Bash(golangci-lint run:*)",
       "WebFetch(domain:tech.davis-hansson.com)"
     ],
     "deny": []

@@ -4,13 +4,13 @@ package patriciatrie
 type Node struct {
 	// エッジラベル（パス圧縮された文字列）
 	label string
-	
+
 	// 子ノードのマップ（最初の文字をキーとする）
 	children map[byte]*Node
-	
+
 	// このノードがキーの終端かどうか
 	isEndOfKey bool
-	
+
 	// 値（必要に応じて）
 	value interface{}
 }
@@ -18,8 +18,10 @@ type Node struct {
 // NewNode 新しいノードを作成
 func NewNode(label string) *Node {
 	return &Node{
-		label:    label,
-		children: make(map[byte]*Node),
+		label:      label,
+		isEndOfKey: false,
+		children:   make(map[byte]*Node),
+		value:      nil,
 	}
 }
 
