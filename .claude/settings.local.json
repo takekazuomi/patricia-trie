@@ -14,7 +14,8 @@
       "Bash(source:*)",
       "Bash(golangci-lint run:*)",
       "WebFetch(domain:tech.davis-hansson.com)",
-      "Bash(command make check)"
+      "Bash(command make check)",
+      "Bash(command make benchmark)"
     ],
     "deny": []
   }
