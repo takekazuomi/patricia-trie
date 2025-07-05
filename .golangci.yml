@@ -20,10 +20,6 @@ linters:
   settings:
     errcheck:
       check-type-assertions: true
-    exhaustruct:
-      include:
-        # No zero values for param structs.
-        - 'grpc-errors\..*[pP]arams'
     forbidigo:
       forbid:
         # main.go以外でのfmt.Print*を禁止、代わりにslogを使用
@@ -35,9 +31,6 @@ linters:
       # TODO, OPT, etc. comments are fine to commit. Use FIXME comments for
       # temporary hacks, and use godox to prevent committing them.
       keywords: [FIXME]
-    gomoddirectives:
-      replace-allow-list: 
-        - github.com/plusmedi/mhv2-backends/pkg/slog/logger
     # 最近のディスプレイは広くなっているので、120から150へ変更。
     lll:
       line-length: 150
@@ -54,22 +47,19 @@ linters:
   exclusions:
     warn-unused: true
     rules:
-      # Don't ban use of fmt.Errorf to create new errors, but the remaining
-      # checks from err113 are useful.
-      - path: '(.+)\.go$'
-        text: "do not define dynamic errors.*"
-      - linters: [staticcheck]
-        text: "SA1019: .*PatientAssignment.*"
+      # テストファイルでは、関数の長さを制限しない
       - linters: [funlen]
         path: ".*_test\\.go$"
+      # テストファイルでは、gosecの弱い乱数生成器警告を除外
+      - linters: [gosec]
+        path: ".*_test\\.go$"
+        text: "G404"
       # main.goでのfmt.Print*の使用を許可
       - linters: [forbidigo]
         path: ".*main\\.go$"
         text: "use of `fmt\\.Print"
       
 formatters:
-  # Enable specific formatter.
-  # Default: [] (uses standard Go formatting)
   settings:
     gci:
       sections:
