@@ -40,8 +40,6 @@ func TestNode_HasChild(t *testing.T) {
 func TestNode_GetChild(t *testing.T) {
 	t.Parallel()
 
-	t.Parallel()
-
 	node := NewNode("test")
 	child := NewNode("child")
 	node.AddChild('a', child)
@@ -60,8 +58,6 @@ func TestNode_GetChild(t *testing.T) {
 func TestNode_AddChild(t *testing.T) {
 	t.Parallel()
 
-	t.Parallel()
-
 	node := NewNode("test")
 	child := NewNode("child")
 
@@ -73,8 +69,6 @@ func TestNode_AddChild(t *testing.T) {
 }
 
 func TestNode_RemoveChild(t *testing.T) {
-	t.Parallel()
-
 	t.Parallel()
 
 	node := NewNode("test")
@@ -93,8 +87,6 @@ func TestNode_RemoveChild(t *testing.T) {
 func TestNode_IsLeaf(t *testing.T) {
 	t.Parallel()
 
-	t.Parallel()
-
 	node := NewNode("test")
 
 	// 子ノードがない場合は葉ノード
@@ -109,8 +101,6 @@ func TestNode_IsLeaf(t *testing.T) {
 }
 
 func TestNode_ChildrenCount(t *testing.T) {
-	t.Parallel()
-
 	t.Parallel()
 
 	node := NewNode("test")

@@ -10,20 +10,15 @@ import (
 func TestNew(t *testing.T) {
 	t.Parallel()
 
-	t.Parallel()
-
 	trie := New()
 
 	assert.NotNil(t, trie)
 	assert.NotNil(t, trie.root)
 	assert.False(t, trie.root.isEndOfKey)
 	assert.Empty(t, trie.root.children)
-	assert.Empty(t, trie.root.children)
 }
 
 func TestTrie_Insert(t *testing.T) {
-	t.Parallel()
-
 	t.Parallel()
 
 	tests := []struct {
@@ -59,8 +54,6 @@ func TestTrie_Insert(t *testing.T) {
 }
 
 func TestTrie_Search(t *testing.T) {
-	t.Parallel()
-
 	t.Parallel()
 
 	trie := New()
@@ -99,8 +92,6 @@ func TestTrie_Search(t *testing.T) {
 func TestTrie_Delete(t *testing.T) {
 	t.Parallel()
 
-	t.Parallel()
-
 	trie := New()
 	keys := []string{"cat", "cats", "dog"}
 
@@ -112,7 +103,7 @@ func TestTrie_Delete(t *testing.T) {
 
 	// 削除テスト
 	err := trie.Delete("cat")
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	// 削除されたキーは見つからない
 	assert.False(t, trie.Search("cat"))
@@ -123,8 +114,6 @@ func TestTrie_Delete(t *testing.T) {
 }
 
 func TestTrie_FindByPrefix(t *testing.T) {
-	t.Parallel()
-
 	t.Parallel()
 
 	trie := New()
