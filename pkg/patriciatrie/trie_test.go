@@ -8,15 +8,19 @@ import (
 )
 
 func TestNew(t *testing.T) {
+	t.Parallel()
+
 	trie := New()
 	
 	assert.NotNil(t, trie)
 	assert.NotNil(t, trie.root)
 	assert.False(t, trie.root.isEndOfKey)
-	assert.Equal(t, 0, len(trie.root.children))
+	assert.Empty(t, trie.root.children)
 }
 
 func TestTrie_Insert(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name string
 		keys []string
@@ -37,6 +41,8 @@ func TestTrie_Insert(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			
 			trie := New()
 			
 			for _, key := range tt.keys {
@@ -48,6 +54,8 @@ func TestTrie_Insert(t *testing.T) {
 }
 
 func TestTrie_Search(t *testing.T) {
+	t.Parallel()
+
 	trie := New()
 	keys := []string{"cat", "cats", "dog", "dogs"}
 	
@@ -73,6 +81,8 @@ func TestTrie_Search(t *testing.T) {
 	
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			
 			result := trie.Search(tt.key)
 			assert.Equal(t, tt.expected, result)
 		})
@@ -80,6 +90,8 @@ func TestTrie_Search(t *testing.T) {
 }
 
 func TestTrie_Delete(t *testing.T) {
+	t.Parallel()
+
 	trie := New()
 	keys := []string{"cat", "cats", "dog"}
 	
@@ -91,7 +103,7 @@ func TestTrie_Delete(t *testing.T) {
 	
 	// 削除テスト
 	err := trie.Delete("cat")
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	
 	// 削除されたキーは見つからない
 	assert.False(t, trie.Search("cat"))
@@ -102,6 +114,8 @@ func TestTrie_Delete(t *testing.T) {
 }
 
 func TestTrie_FindByPrefix(t *testing.T) {
+	t.Parallel()
+
 	trie := New()
 	keys := []string{"cat", "cats", "dog", "dogs", "elephant"}
 	
@@ -140,6 +154,8 @@ func TestTrie_FindByPrefix(t *testing.T) {
 	
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			
 			result := trie.FindByPrefix(tt.prefix)
 			assert.ElementsMatch(t, tt.expected, result)
 		})

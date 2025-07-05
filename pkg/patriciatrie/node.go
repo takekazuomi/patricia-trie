@@ -26,12 +26,14 @@ func NewNode(label string) *Node {
 // HasChild 指定されたバイトで始まる子ノードが存在するかチェック
 func (n *Node) HasChild(b byte) bool {
 	_, exists := n.children[b]
+
 	return exists
 }
 
 // GetChild 指定されたバイトで始まる子ノードを取得
 func (n *Node) GetChild(b byte) (*Node, bool) {
 	child, exists := n.children[b]
+
 	return child, exists
 }
 

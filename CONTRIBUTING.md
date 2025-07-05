@@ -210,6 +210,88 @@ git commit -m "fix: コンフリクトを解決"
 - 機能を小さな単位に分解
 - 必要に応じて機能フラグを活用
 
+## Makefileの設計方針
+
+### 安全なMakefileの原則
+
+このプロジェクトでは[Your Makefiles are wrong](https://tech.davis-hansson.com/p/make/)の方針に基づく安全なMakefileを採用：
+
+- **厳格なシェル設定**: `bash -eu -o pipefail`でエラー時の即座停止
+- **未定義変数の警告**: 未定義変数使用時に警告表示
+- **エラー時クリーンアップ**: `.DELETE_ON_ERROR`で不完全なファイルを自動削除
+- **明示的な依存関係**: ビルトインルールを無効化し明示的に定義
+- **PHONYターゲット**: ファイル生成しないターゲットを明示
+
+### シンプルさを保つ
+
+Makefileは複雑にしすぎない。以下の原則に従う：
+
+- **単純なコマンドの組み合わせ**: 基本的なタスクの定義に留める
+- **複雑なロジックは外部スクリプト**: 条件分岐や複雑な処理は`scripts/`ディレクトリのシェルスクリプトに移譲
+- **1ターゲット1責任**: 各ターゲットは単一の明確な責任を持つ
+- **依存関係は最小限**: 過度な依存関係は避ける
+- **タブインデント**: 伝統的なタブを使用（`.RECIPEPREFIX`は使用しない）
+- **センチネルファイル不使用**: シンプルさを保つためセンチネルファイルは使用しない
+- **Magic Variables活用**: `$@`, `$<`, `$^`などの自動変数を積極的に使用
+
+### 良い例
+
+```makefile
+# シンプルなコマンド実行
+test: ## テストを実行
+	go test -v ./...
+
+# 外部スクリプトの呼び出し
+install-deps: ## 開発依存ツールをインストール
+	@./scripts/install-deps.sh
+```
+
+### 避けるべき例
+
+```makefile
+# 複雑すぎる例（避ける）
+install-deps: ## 開発依存ツールをインストール
+	@echo "golangci-lintをインストール中..."
+	@mkdir -p tmp
+	@if [ ! -f ./tmp/golangci-lint ]; then \
+		curl -sSfL https://example.com/install.sh | sh -s -- -b ./tmp latest; \
+	fi
+	@if command -v direnv >/dev/null 2>&1; then \
+		direnv allow; \
+	else \
+		echo "警告: direnvが必要です"; \
+	fi
+```
+
+### Magic Variablesの活用
+
+Makefileの可読性と保守性を向上させるため、自動変数を積極的に使用：
+
+```makefile
+# 良い例: Magic Variablesを使用
+build: cmd/example/main.go
+	go build -o bin/$(BINARY_NAME) $<
+
+# 避ける例: ハードコーディング
+build: cmd/example/main.go
+	go build -o bin/patricia-trie cmd/example/main.go
+```
+
+#### 主要なMagic Variables
+
+- `$@`: ターゲット名
+- `$<`: 最初の依存関係
+- `$^`: すべての依存関係（重複除去）
+- `$+`: すべての依存関係（重複含む）
+- `$?`: ターゲットより新しい依存関係
+
+### 複雑な処理の外部化
+
+- **スクリプト配置**: `scripts/`ディレクトリに配置
+- **実行権限**: `chmod +x`で実行可能にする
+- **エラーハンドリング**: `set -euo pipefail`を使用
+- **プロジェクトルート**: `$(dirname "${BASH_SOURCE[0]}")`で相対パス解決
+
 ## 参考文献
 
 - [Trunk-based Development](https://trunkbaseddevelopment.com/)

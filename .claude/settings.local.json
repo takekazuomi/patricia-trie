@@ -6,7 +6,14 @@
       "Bash(go mod init:*)",
       "Bash(mkdir:*)",
       "Bash(go mod:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(make test:*)",
+      "Bash(make lint)",
+      "Bash(go test:*)",
+      "Bash(direnv allow:*)",
+      "Bash(source:*)",
+      "Bash(golangci-lint run:*)",
+      "WebFetch(domain:tech.davis-hansson.com)"
     ],
     "deny": []
   }
