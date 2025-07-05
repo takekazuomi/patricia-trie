@@ -24,14 +24,13 @@ linters:
       include:
         # No zero values for param structs.
         - 'grpc-errors\..*[pP]arams'
-    # forbidigo:
-    #   forbid:
-    #     # Unlike most Buf projects, we're allowing the standard library's log
-    #     # package: this is a demo service, so let's keep it simple.
-    #     - pattern: '^fmt\.Print'
-    #     - pattern: '^print$'
-    #     - pattern: '^println$'
-    #     - pattern: '^panic$'
+    forbidigo:
+      forbid:
+        # main.go以外でのfmt.Print*を禁止、代わりにslogを使用
+        - pattern: '^fmt\.Print'
+        - pattern: '^print$'
+        - pattern: '^println$'
+        - pattern: '^panic$'
     godox:
       # TODO, OPT, etc. comments are fine to commit. Use FIXME comments for
       # temporary hacks, and use godox to prevent committing them.
@@ -63,6 +62,10 @@ linters:
         text: "SA1019: .*PatientAssignment.*"
       - linters: [funlen]
         path: ".*_test\\.go$"
+      # main.goでのfmt.Print*の使用を許可
+      - linters: [forbidigo]
+        path: ".*main\\.go$"
+        text: "use of `fmt\\.Print"
       
 formatters:
   # Enable specific formatter.

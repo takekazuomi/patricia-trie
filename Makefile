@@ -1,4 +1,16 @@
-.PHONY: build test test-coverage benchmark lint fmt clean help
+# 安全なMakefileのためのプリアンブル
+SHELL := bash
+.ONESHELL:
+.SHELLFLAGS := -eu -o pipefail -c
+.DELETE_ON_ERROR:
+MAKEFLAGS += --warn-undefined-variables
+MAKEFLAGS += --no-builtin-rules
+
+ifeq ($(origin .RECIPEPREFIX), undefined)
+  $(error This Make does not support .RECIPEPREFIX. Please use GNU Make 4.0 or later)
+endif
+
+.PHONY: build test test-coverage benchmark lint fmt clean clean-all install-deps setup mod-tidy check help
 
 # デフォルトターゲット
 .DEFAULT_GOAL := help
@@ -9,8 +21,8 @@ COVERAGE_OUT := coverage.out
 COVERAGE_HTML := coverage.html
 
 # ビルド
-build: ## バイナリをビルド
-	go build -o bin/$(BINARY_NAME) ./cmd/example
+build: cmd/example/main.go ## バイナリをビルド
+	go build -o bin/$(BINARY_NAME) $<
 
 # テスト
 test: ## テストを実行
@@ -28,7 +40,12 @@ benchmark: ## ベンチマークを実行
 
 # 静的解析
 lint: ## golangci-lintを実行
-	golangci-lint run
+	@if [ -f ./tmp/golangci-lint ]; then \
+		./tmp/golangci-lint run; \
+	else \
+		echo "golangci-lintが見つかりません。make install-depsを実行してください"; \
+		exit 1; \
+	fi
 
 # フォーマット
 fmt: ## コードをフォーマット
@@ -44,10 +61,17 @@ clean: ## 生成されたファイルを削除
 	rm -rf bin/
 	rm -f $(COVERAGE_OUT) $(COVERAGE_HTML)
 
+# 完全クリーンアップ
+clean-all: clean ## 依存ツールも含めて完全削除
+	rm -rf tmp/
+
+# 依存ツールのインストール
+install-deps: ## 開発に必要なツールをインストール
+	@./scripts/install-deps.sh
+
 # 開発用のセットアップ
-setup: ## 開発環境をセットアップ
+setup: install-deps ## 開発環境をセットアップ
 	go mod download
-	go install golang.org/x/tools/cmd/goimports@latest
 
 # 全体チェック
 check: fmt lint test ## フォーマット、リント、テストを実行

@@ -17,9 +17,11 @@ func main() {
 	fmt.Println("=== パトリシアトライの使用例 ===")
 	
 	for _, key := range keys {
-		if err := trie.Insert(key); err != nil {
+		err := trie.Insert(key)
+		if err != nil {
 			log.Fatalf("キーの挿入に失敗: %v", err)
 		}
+
 		fmt.Printf("挿入: %s\n", key)
 	}
 	

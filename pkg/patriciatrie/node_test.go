@@ -7,18 +7,22 @@ import (
 )
 
 func TestNewNode(t *testing.T) {
+	t.Parallel()
+
 	label := "test"
 	node := NewNode(label)
 	
 	assert.NotNil(t, node)
 	assert.Equal(t, label, node.label)
 	assert.NotNil(t, node.children)
-	assert.Equal(t, 0, len(node.children))
+	assert.Empty(t, node.children)
 	assert.False(t, node.isEndOfKey)
 	assert.Nil(t, node.value)
 }
 
 func TestNode_HasChild(t *testing.T) {
+	t.Parallel()
+
 	node := NewNode("test")
 	
 	// 子ノードが存在しない場合
@@ -34,6 +38,8 @@ func TestNode_HasChild(t *testing.T) {
 }
 
 func TestNode_GetChild(t *testing.T) {
+	t.Parallel()
+
 	node := NewNode("test")
 	child := NewNode("child")
 	node.AddChild('a', child)
@@ -50,31 +56,37 @@ func TestNode_GetChild(t *testing.T) {
 }
 
 func TestNode_AddChild(t *testing.T) {
+	t.Parallel()
+
 	node := NewNode("test")
 	child := NewNode("child")
 	
 	// 子ノードを追加
 	node.AddChild('a', child)
 	
-	assert.Equal(t, 1, len(node.children))
+	assert.Len(t, node.children, 1)
 	assert.Equal(t, child, node.children['a'])
 }
 
 func TestNode_RemoveChild(t *testing.T) {
+	t.Parallel()
+
 	node := NewNode("test")
 	child := NewNode("child")
 	node.AddChild('a', child)
 	
-	assert.Equal(t, 1, len(node.children))
+	assert.Len(t, node.children, 1)
 	
 	// 子ノードを削除
 	node.RemoveChild('a')
 	
-	assert.Equal(t, 0, len(node.children))
+	assert.Empty(t, node.children)
 	assert.False(t, node.HasChild('a'))
 }
 
 func TestNode_IsLeaf(t *testing.T) {
+	t.Parallel()
+
 	node := NewNode("test")
 	
 	// 子ノードがない場合は葉ノード
@@ -89,6 +101,8 @@ func TestNode_IsLeaf(t *testing.T) {
 }
 
 func TestNode_ChildrenCount(t *testing.T) {
+	t.Parallel()
+
 	node := NewNode("test")
 	
 	// 初期状態では子ノードは0個
@@ -97,6 +111,7 @@ func TestNode_ChildrenCount(t *testing.T) {
 	// 子ノードを追加
 	child1 := NewNode("child1")
 	child2 := NewNode("child2")
+
 	node.AddChild('a', child1)
 	node.AddChild('b', child2)
 	
