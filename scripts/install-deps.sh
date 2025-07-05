@@ -11,8 +11,8 @@ echo "=== 開発依存ツールのインストール ==="
 # golangci-lintのインストール
 echo "📦 golangci-lintをインストール中..."
 mkdir -p "${PROJECT_ROOT}/tmp"
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "${PROJECT_ROOT}/tmp" latest
-echo "✅ golangci-lint v2がインストールされました"
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "${PROJECT_ROOT}/tmp" v2.2.1
+echo "✅ golangci-lint v2.2.1がインストールされました"
 
 # goimportsのインストール
 echo "📦 goimportsをインストール中..."

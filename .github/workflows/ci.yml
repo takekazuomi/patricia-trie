@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [1.21, 1.22]
+        go-version: [1.22, 1.24]
     
     steps:
     - name: コードをチェックアウト
@@ -59,12 +59,12 @@ jobs:
     - name: Go環境をセットアップ
       uses: actions/setup-go@v4
       with:
-        go-version: 1.22
+        go-version: 1.24
         
     - name: golangci-lintを実行
-      uses: golangci/golangci-lint-action@v6
+      uses: golangci/golangci-lint-action@v8
       with:
-        version: v2.3.0
+        version: v2.2.1
         args: --timeout=5m
 
   build:
@@ -78,7 +78,7 @@ jobs:
     - name: Go環境をセットアップ
       uses: actions/setup-go@v4
       with:
-        go-version: 1.22
+        go-version: 1.24
         
     - name: ビルドを実行
       run: make build
@@ -95,7 +95,7 @@ jobs:
     - name: Go環境をセットアップ
       uses: actions/setup-go@v4
       with:
-        go-version: 1.22
+        go-version: 1.24
         
     - name: ベンチマークを実行
       run: make benchmark
