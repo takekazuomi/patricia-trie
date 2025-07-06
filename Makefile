@@ -85,7 +85,7 @@ clean-all: clean ## 依存ツールも含めて完全削除
 
 # テストデータクリーンアップ
 clean-testdata: ## ベンチマーク用テストデータを削除
-	rm -rf testdata/*.txt testdata/*/*.txt
+	rm -rf testdata/*.txt testdata/*/*.txt testdata/*.csv testdata/*/*.csv
 
 # 依存ツールのインストール
 install-deps: ## 開発に必要なツールをインストール
