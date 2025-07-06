@@ -9,6 +9,7 @@
       "Bash(source:*)",
       "Bash(rm:*)",
       "Bash(mkdir:*)",
+      "Bash(make:*)",
       "Bash(ls:*)",
       "Bash(grep:*)",
       "Bash(golangci-lint run:*)",
@@ -17,15 +18,13 @@
       "Bash(go mod:*)",
       "Bash(find:*)",
       "Bash(direnv allow:*)",
-      "Bash(command make setup_benchmark)",
-      "Bash(command make clean)",
-      "Bash(command make clean-testdata)",
-      "Bash(command make check)",
-      "Bash(command make benchmark)",
-      "Bash(command make benchmark-realistic)",
-      "Bash(command make benchmark-large)",
       "Bash(chmod:*)"
     ],
-    "deny": []
+    "deny": [
+      {
+        "path": ".golangci.yml",
+        "reason": "Linter configuration changes are prohibited"
+      }
+    ]
   }
 }
