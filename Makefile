@@ -57,13 +57,10 @@ setup_benchmark: ## ベンチマーク用テストデータをセットアップ
 	@./scripts/setup_benchmark_data.sh
 
 # 静的解析
-lint: ## golangci-lintを実行
-	@if [ -f ./tmp/golangci-lint ]; then \
-		./tmp/golangci-lint run; \
-	else \
-		echo "golangci-lintが見つかりません。make install-depsを実行してください"; \
-		exit 1; \
-	fi
+# リンターが見つからない場合は make install-deps を実行してください
+lint: ## golangci-lintとmarkdownlintを実行
+	golangci-lint run
+	markdownlint-cli2 README.md CLAUDE.md FAQ.md CONTRIBUTING.md testdata/README.md docs/*.md
 
 # フォーマット
 fmt: ## コードをフォーマット

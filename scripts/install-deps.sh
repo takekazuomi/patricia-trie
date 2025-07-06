@@ -19,6 +19,17 @@ echo "📦 goimportsをインストール中..."
 go install golang.org/x/tools/cmd/goimports@latest
 echo "✅ goimportsがインストールされました"
 
+# markdownlint-cli2のインストール
+echo "📦 markdownlint-cli2をインストール中..."
+if command -v npm >/dev/null 2>&1; then
+    npm install -g markdownlint-cli2
+    echo "✅ markdownlint-cli2がインストールされました"
+else
+    echo "⚠️  警告: npmがインストールされていません"
+    echo "   markdownlint-cli2のインストールをスキップします"
+    echo "   手動でインストールしてください: npm install -g markdownlint-cli2"
+fi
+
 # direnvのチェックと設定
 echo "🔍 direnvの設定をチェック中..."
 if command -v direnv >/dev/null 2>&1; then

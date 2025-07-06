@@ -239,11 +239,11 @@ Makefileは複雑にしすぎない。以下の原則に従う：
 ```makefile
 # シンプルなコマンド実行
 test: ## テストを実行
-	go test -v ./...
+    go test -v ./...
 
 # 外部スクリプトの呼び出し
 install-deps: ## 開発依存ツールをインストール
-	@./scripts/install-deps.sh
+    @./scripts/install-deps.sh
 ```
 
 ### 避けるべき例
@@ -251,16 +251,16 @@ install-deps: ## 開発依存ツールをインストール
 ```makefile
 # 複雑すぎる例（避ける）
 install-deps: ## 開発依存ツールをインストール
-	@echo "golangci-lintをインストール中..."
-	@mkdir -p tmp
-	@if [ ! -f ./tmp/golangci-lint ]; then \
-		curl -sSfL https://example.com/install.sh | sh -s -- -b ./tmp latest; \
-	fi
-	@if command -v direnv >/dev/null 2>&1; then \
-		direnv allow; \
-	else \
-		echo "警告: direnvが必要です"; \
-	fi
+    @echo "golangci-lintをインストール中..."
+    @mkdir -p tmp
+    @if [ ! -f ./tmp/golangci-lint ]; then \
+        curl -sSfL https://example.com/install.sh | sh -s -- -b ./tmp latest; \
+    fi
+    @if command -v direnv >/dev/null 2>&1; then \
+        direnv allow; \
+    else \
+        echo "警告: direnvが必要です"; \
+    fi
 ```
 
 ### Magic Variablesの活用
@@ -270,11 +270,11 @@ Makefileの可読性と保守性を向上させるため、自動変数を積極
 ```makefile
 # 良い例: Magic Variablesを使用
 build: cmd/example/main.go
-	go build -o bin/$(BINARY_NAME) $<
+    go build -o bin/$(BINARY_NAME) $<
 
 # 避ける例: ハードコーディング
 build: cmd/example/main.go
-	go build -o bin/patricia-trie cmd/example/main.go
+    go build -o bin/patricia-trie cmd/example/main.go
 ```
 
 #### 主要なMagic Variables
