@@ -1,6 +1,14 @@
 # パトリシアトライ（Patricia Trie）
 
-パトリシアトライまたはRadix Treeとも呼ばれる、空間効率化されたトライ木データ構造の実装。
+> **Note**
+>
+> このプロジェクトは[Claude Code](https://claude.ai/code)のテスト用リポジトリ。
+> 内容をプロンプトで指示して、コードのほとんどはClaude Codeで書いている。
+>
+> テストも生成AIが書いており現時点では、正確性の確認は限定的。
+> コードの流用はお勧めしない。
+
+パトリシアトライまたはRadix Treeとも呼ばれる、空間効率化されたトライ木データ構造のGo実装。
 
 ## 概要
 
@@ -19,7 +27,7 @@
 
 通常のトライ木では、文字列の各文字に対して個別のノードを作成。
 
-```
+```text
         root
        /    \
       c      s
@@ -34,7 +42,7 @@
 
 パトリシアトライでは、単一の子を持つノードを圧縮：
 
-```
+```text
         root
        /    \
      "cat"  "sun"
@@ -78,35 +86,139 @@
 - k: キーの長さ
 - m: マッチするキーの数
 
-## 実装予定の機能
+## インストール
 
-- [x] 基本的なパトリシアトライ構造
-- [ ] 挿入操作
-- [ ] 検索操作
-- [ ] 削除操作
-- [ ] プレフィックス検索
-- [ ] イテレータ
-- [ ] 永続化機能
+```bash
+go get github.com/takekazu/patricia-trie/pkg/patriciatrie
+```
+
+## クイックスタート
+
+```bash
+# リポジトリのクローン
+git clone https://github.com/takekazu/patricia-trie.git
+cd patricia-trie
+
+# 開発環境のセットアップ
+make setup
+
+# テストの実行
+make test
+
+# ベンチマークの実行
+make benchmark
+```
+
+## 実装済み機能
+
+- ✅ 基本的なパトリシアトライ構造
+- ✅ 挿入操作（Insert）
+- ✅ 検索操作（Search）
+- ✅ 削除操作（Delete）
+- ✅ プレフィックス検索（FindByPrefix）
 
 ## 使用例
 
-```javascript
-// 使用例（実装予定）
-const trie = new パトリシアトライ();
+```go
+package main
 
-// 挿入
-trie.insert("cat");
-trie.insert("cats");
-trie.insert("dog");
-trie.insert("dogs");
+import (
+    "fmt"
+    "github.com/takekazu/patricia-trie/pkg/patriciatrie"
+)
 
-// 検索
-console.log(trie.search("cat")); // true
-console.log(trie.search("ca"));  // false
-
-// プレフィックス検索
-console.log(trie.findByPrefix("cat")); // ["cat", "cats"]
+func main() {
+    // トライの作成
+    trie := patriciatrie.New()
+    
+    // キーの挿入
+    trie.Insert("cat")
+    trie.Insert("cats")
+    trie.Insert("dog")
+    trie.Insert("dogs")
+    
+    // 検索
+    if found := trie.Search("cat"); found {
+        fmt.Printf("Found: cat\n")
+    }
+    
+    // プレフィックス検索
+    keys := trie.FindByPrefix("cat")
+    fmt.Println("Keys with prefix 'cat':", keys) // [cat cats]
+    
+    // 削除
+    trie.Delete("cat")
+    
+    // 削除後の確認
+    if found := trie.Search("cat"); !found {
+        fmt.Printf("cat has been deleted\n")
+    }
+    
+    // 全キー取得
+    allKeys := trie.FindByPrefix("")
+    fmt.Printf("All keys: %v\n", allKeys) // [dogs cats]
+}
 ```
+
+## ベンチマーク
+
+### 基本ベンチマーク
+
+```bash
+make benchmark
+```
+
+### 大規模データベンチマーク（100万キー）
+
+```bash
+make setup_benchmark      # ベンチマークデータのセットアップ
+make benchmark-large      # 大規模ベンチマークの実行
+```
+
+### 実世界データベンチマーク（日本語辞書・IPアドレス）
+
+```bash
+make benchmark-realistic  # 実世界データベンチマークの実行
+```
+
+## 開発
+
+### 必要な環境
+
+- Go 1.24.2以上
+- make
+- golangci-lint v2.2.1（静的解析用）
+
+### 開発コマンド
+
+```bash
+make help          # 利用可能なコマンド一覧
+make test          # テスト実行
+make lint          # 静的解析
+make fmt           # コード整形
+make check         # fmt, lint, testを一括実行
+```
+
+### プロジェクト構造
+
+```text
+patricia-trie/
+├── pkg/patriciatrie/     # パトリシアトライ実装
+│   ├── trie.go          # メインのトライ構造
+│   ├── node.go          # ノード構造
+│   └── *_test.go        # テストファイル
+├── cmd/example/         # 使用例
+├── testdata/            # テスト用データ
+└── docs/                # ドキュメント
+```
+
+## 貢献
+
+[CONTRIBUTING.md](CONTRIBUTING.md)を参照。
+
+## FAQ
+
+[FAQ.md](FAQ.md)を参照。
 
 ## 参考文献
 
