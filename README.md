@@ -116,9 +116,6 @@ make benchmark
 - ✅ 検索操作（Search）
 - ✅ 削除操作（Delete）
 - ✅ プレフィックス検索（FindByPrefix）
-- ✅ 全キー取得（AllKeys）
-- ✅ サイズ取得（Size）
-- ✅ 空判定（IsEmpty）
 
 ## 使用例
 
@@ -134,26 +131,32 @@ func main() {
     // トライの作成
     trie := patriciatrie.New()
     
-    // キーと値の挿入
-    trie.Insert("cat", "猫")
-    trie.Insert("cats", "猫たち")
-    trie.Insert("dog", "犬")
-    trie.Insert("dogs", "犬たち")
+    // キーの挿入
+    trie.Insert("cat")
+    trie.Insert("cats")
+    trie.Insert("dog")
+    trie.Insert("dogs")
     
     // 検索
-    if value, found := trie.Search("cat"); found {
-        fmt.Printf("Found: %s\n", value) // Found: 猫
+    if found := trie.Search("cat"); found {
+        fmt.Printf("Found: cat\n")
     }
     
     // プレフィックス検索
     keys := trie.FindByPrefix("cat")
-    fmt.Println(keys) // [cat cats]
+    fmt.Println("Keys with prefix 'cat':", keys) // [cat cats]
     
     // 削除
     trie.Delete("cat")
     
-    // サイズ取得
-    fmt.Printf("Size: %d\n", trie.Size()) // Size: 3
+    // 削除後の確認
+    if found := trie.Search("cat"); !found {
+        fmt.Printf("cat has been deleted\n")
+    }
+    
+    // 全キー取得
+    allKeys := trie.FindByPrefix("")
+    fmt.Printf("All keys: %v\n", allKeys) // [dogs cats]
 }
 ```
 
