@@ -13,6 +13,7 @@
 - 基本的なPatricia Trie実装完了
 - ユニットテスト、ベンチマークテスト実装済み
 - 大規模ベンチマーク（〜100万キー）と実世界データベンチマーク追加
+- README.mdを更新し、Claude Codeテストプロジェクトであることを明記
 
 ## 開発セットアップ
 
@@ -123,6 +124,7 @@ make help            # ヘルプ表示
 3. より高度な最適化（メモリプール、カスタムアロケータ）
 4. プロファイリングとボトルネック分析
 5. APIドキュメントの充実
+6. Goバージョンの更新（Go 1.25リリース後）
 
 ## Git設定
 
@@ -144,7 +146,7 @@ Trunk-based開発を採用。
 3. 頻繁にmainブランチへPR作成・マージ
 4. 大きな機能の場合は、devブランチで統合後にmainへPR
 
-### コミットメッセージ
+### コミットメッセージスタイル
 
 体言止めで簡潔に記述。
 
@@ -153,7 +155,18 @@ feat: パトリシアトライの基本構造を実装
 fix: 検索処理のバグを修正
 test: 挿入操作のテストケースを追加
 docs: README.mdの使用例を更新
+chore: 依存関係の更新
+refactor: コードのリファクタリング
 ```
+
+#### プレフィックスの使い分け
+
+- **feat**: 新機能の追加
+- **fix**: バグ修正
+- **docs**: ドキュメントのみの変更
+- **chore**: ビルドプロセスや補助ツールの変更
+- **test**: テストの追加・修正
+- **refactor**: コードのリファクタリング
 
 ## 英語・日本語対訳表
 
@@ -161,61 +174,113 @@ docs: README.mdの使用例を更新
 
 | 英語 | 日本語 |
 |------|--------|
-| Patricia Trie | パトリシアトライ |
-| Radix Tree | 基数木 |
-| Trie | トライ木 |
-| Node | ノード |
-| Edge | エッジ |
-| Path compression | パス圧縮 |
-| Prefix | プレフィックス |
-| Insert | 挿入 |
-| Search | 検索 |
-| Delete | 削除 |
-| Lookup | 検索 |
-| Key | キー |
-| Value | 値 |
-| Root | ルート |
-| Leaf | 葉 |
-| Branch | 分岐 |
-| Compression | 圧縮 |
-| Algorithm | アルゴリズム |
-| Data structure | データ構造 |
-| Time complexity | 時間計算量 |
-| Space complexity | 空間計算量 |
-| Memory optimization | メモリ最適化 |
-| Performance | パフォーマンス |
-| Implementation | 実装 |
-| Test suite | テストスイート |
-| Build system | ビルドシステム |
-| Package management | パッケージ管理 |
-| Go module | Goモジュール |
-| Makefile | Makefile |
-| Test coverage | テストカバレッジ |
-| Benchmark | ベンチマーク |
-| Large-scale benchmark | 大規模ベンチマーク |
-| Realistic benchmark | 実世界データベンチマーク |
-| Memory efficiency | メモリ効率 |
-| Throughput | スループット |
-| Latency | レイテンシ |
-| Profiling | プロファイリング |
-| Static analysis | 静的解析 |
-| Formatting | 整形 |
-| Linting | リント |
-| golangci-lint | golangci-lint |
-| Example | 例 |
-| Documentation | ドキュメント |
-| markdownlint | markdownlint |
-| Pull Request | PR |
-| Branch | ブランチ |
-| Merge | マージ |
-| Review | レビュー |
-| Commit message | コミットメッセージ |
-| Feature branch | 機能ブランチ |
-| Main branch | mainブランチ |
-| Development branch | 開発ブランチ |
-| Trunk-based development | Trunk-based開発 |
-| Short-lived branch | 短命ブランチ |
-| CI/CD | CI/CD |
-| GitHub Actions | GitHub Actions |
 | act | act |
+| Algorithm | アルゴリズム |
+| Allocator | アロケータ |
+| API | API |
+| Assertion | アサーション |
+| Benchmark | ベンチマーク |
+| Bottleneck | ボトルネック |
+| Branch | ブランチ |
+| Build system | ビルドシステム |
+| CI/CD | CI/CD |
+| CLI | CLI |
+| Commit message | コミットメッセージ |
+| Compression | 圧縮 |
+| Configuration | 設定 |
+| Conflict | コンフリクト |
+| Context | コンテキスト |
+| Continuous delivery | 継続的デリバリー |
+| Continuous integration | 継続的統合 |
+| Corpus | コーパス |
+| CSV | CSV |
+| Data structure | データ構造 |
+| Database | データベース |
+| Delete | 削除 |
+| Delimiter | 区切り文字 |
+| Dependency | 依存関係 |
+| Deployment | デプロイ |
+| Development branch | 開発ブランチ |
+| Dictionary | 辞書 |
+| Documentation | ドキュメント |
+| Edge | エッジ |
+| Encoding | エンコーディング |
+| Environment | 環境 |
+| Example | 例 |
+| Feature branch | 機能ブランチ |
+| Feature flag | 機能フラグ |
+| Formatting | 整形 |
+| Framework | フレームワーク |
+| Garbage collection | ガベージコレクション |
+| GitHub Actions | GitHub Actions |
+| Go module | Go module |
+| golangci-lint | golangci-lint |
+| Hook | フック |
+| Hot fix | ホットフィックス |
+| Implementation | 実装 |
+| Insert | 挿入 |
+| Issue | Issue |
+| Key | キー |
+| Large-scale benchmark | 大規模ベンチマーク |
+| Latency | レイテンシ |
+| Leaf | リーフ |
+| Library | ライブラリ |
+| License | ライセンス |
+| Linting | リント |
 | Local CI | ローカルCI |
+| Logging | ログ |
+| Lookup | 検索 |
+| Main branch | mainブランチ |
+| Makefile | Makefile |
+| markdownlint | markdownlint |
+| Matrix test | マトリクステスト |
+| Memory efficiency | メモリ効率 |
+| Memory optimization | メモリ最適化 |
+| Memory pool | メモリプール |
+| Merge | マージ |
+| Metrics | メトリクス |
+| Migration | 移行 |
+| Mock | モック |
+| Monitoring | モニタリング |
+| Node | ノード |
+| Normalization | 正規化 |
+| Package management | パッケージ管理 |
+| Parsing | 解析 |
+| Path compression | パス圧縮 |
+| Patricia Trie | パトリシアトライ |
+| Performance | パフォーマンス |
+| Pipeline | パイプライン |
+| Prefix | プレフィックス |
+| Profiling | プロファイリング |
+| Pull Request | PR |
+| Queue | キュー |
+| Radix Tree | 基数木 |
+| Realistic benchmark | 実世界データベンチマーク |
+| Refactoring | リファクタリング |
+| Regression | 回帰 |
+| Repository | リポジトリ |
+| Resilience | 回復力 |
+| Resource | リソース |
+| Review | レビュー |
+| Rollback | ロールバック |
+| Root | ルート |
+| Scalability | スケーラビリティ |
+| Search | 検索 |
+| Short-lived branch | 短命ブランチ |
+| Space complexity | 空間計算量 |
+| Static analysis | 静的解析 |
+| Streaming | ストリーミング |
+| Synchronization | 同期 |
+| Template | テンプレート |
+| Test coverage | テストカバレッジ |
+| Test suite | テストスイート |
+| Throughput | スループット |
+| Time complexity | 時間計算量 |
+| Tokenizer | トークナイザー |
+| Trie | トライ木 |
+| Trunk-based development | Trunk-based開発 |
+| Validation | 検証 |
+| Value | 値 |
+| Vulnerability | 脆弱性 |
+| Workflow | ワークフロー |
+| Workload | ワークロード |

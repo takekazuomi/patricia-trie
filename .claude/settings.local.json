@@ -24,7 +24,9 @@
       "Bash(command make benchmark)",
       "Bash(command make benchmark-realistic)",
       "Bash(command make benchmark-large)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(gh issue view:*)",
+      "Bash(markdownlint-cli2:*)"
     ],
     "deny": []
   }

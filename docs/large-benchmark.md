@@ -48,21 +48,17 @@ curl -L -o small_lex.zip \
 
 *IPv4:*
 
-```
 - 形式: xxx.xxx.xxx.xxx (7〜15文字)
 - 文字種: 数字とドット
 - 階層構造: ネットワーク/ホスト分離
 - プレフィックス: /8, /16, /24 相当
-```
 
 *IPv6:*
 
-```
 - 形式: xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx
 - 文字種: 16進数とコロン
 - 長さ: 39文字固定
 - プレフィックス: /64, /48 相当
-```
 
 ## ベンチマーク項目
 
@@ -152,7 +148,7 @@ make setup_benchmark
 
 **生成ファイル:**
 
-```
+```text
 testdata/
 ├── japanese/
 │   ├── 1000.csv              # 小規模テスト用 1K語（漢字開始のみ）
