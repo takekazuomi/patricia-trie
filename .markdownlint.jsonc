@@ -1,0 +1,15 @@
+{
+  // markdownlint設定ファイル
+  // 詳細: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+  
+  // ファイル除外設定
+  // 一時ファイルやビルド成果物を除外
+  "ignorePatterns": [
+    "tmp/**/*.md"
+  ],
+  
+  // MD013: 行長制限を無効化
+  // 理由: 日本語文書では英語と異なり、適切な改行位置の判断が困難
+  // また、URL、コードブロック、データサンプル等で長い行が必要な場合がある
+  "MD013": false
+}

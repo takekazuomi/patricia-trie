@@ -4,7 +4,7 @@
 
 ## ディレクトリ構成
 
-```
+```text
 testdata/
 ├── japanese/           # 日本語辞書データ
 │   ├── sudachi_core.txt      # 辞書エントリ（100K語）
