@@ -47,13 +47,16 @@ linters:
   exclusions:
     warn-unused: true
     rules:
-      # テストファイルでは、関数の長さを制限しない
+      # テストとベンチマークでは、関数の長さを制限しない
       - linters: [funlen]
         path: ".*_test\\.go$"
-      # テストファイルでは、gosecの弱い乱数生成器警告を除外
+      # テストとベンチマークでは、gosecの警告を除外（テストデータ読み込みと弱い乱数生成器）
       - linters: [gosec]
         path: ".*_test\\.go$"
-        text: "G404"
+        text: "G404|G304"
+      # ベンチマークファイルでは、重複コード、事前定義識別子、非推奨警告を除外
+      - linters: [dupl]
+        path: ".*_bench_test\\.go$"
       # main.goでのfmt.Print*の使用を許可
       - linters: [forbidigo]
         path: ".*main\\.go$"

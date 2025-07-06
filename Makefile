@@ -10,7 +10,7 @@ ifeq ($(origin .RECIPEPREFIX), undefined)
   $(error This Make does not support .RECIPEPREFIX. Please use GNU Make 4.0 or later)
 endif
 
-.PHONY: build test test-coverage benchmark lint fmt clean clean-all install-deps setup mod-tidy check help
+.PHONY: build test test-coverage benchmark benchmark-large benchmark-realistic setup_benchmark lint fmt clean clean-all clean-testdata install-deps setup mod-tidy check ci-local ci-full help
 
 # デフォルトターゲット
 .DEFAULT_GOAL := help
@@ -35,8 +35,21 @@ test-coverage: ## テストカバレッジを取得
 	@echo "カバレッジレポート: $(COVERAGE_HTML)"
 
 # ベンチマーク
-benchmark: ## ベンチマークを実行
+benchmark: ## 基本ベンチマークを実行
 	go test -bench=. -benchmem ./...
+
+# 大規模ベンチマーク
+benchmark-large: setup_benchmark ## 大規模データセットでベンチマークを実行
+	go test -bench=BenchmarkTrie_Large -benchmem -timeout=30m ./pkg/patriciatrie
+
+# リアルデータベンチマーク
+benchmark-realistic: setup_benchmark ## 日本語・IPアドレスデータでベンチマークを実行
+	go test -bench=BenchmarkTrie_Japanese -benchmem -timeout=30m ./pkg/patriciatrie
+	go test -bench=BenchmarkTrie_IPv -benchmem -timeout=30m ./pkg/patriciatrie
+
+# ベンチマーク用データセットアップ
+setup_benchmark: ## ベンチマーク用テストデータをセットアップ
+	@./scripts/setup_benchmark_data.sh
 
 # 静的解析
 lint: ## golangci-lintを実行
@@ -65,6 +78,10 @@ clean: ## 生成されたファイルを削除
 clean-all: clean ## 依存ツールも含めて完全削除
 	rm -rf tmp/
 
+# テストデータクリーンアップ
+clean-testdata: ## ベンチマーク用テストデータを削除
+	rm -rf testdata/*.txt testdata/*/*.txt
+
 # 依存ツールのインストール
 install-deps: ## 開発に必要なツールをインストール
 	@./scripts/install-deps.sh
@@ -75,6 +92,32 @@ setup: install-deps ## 開発環境をセットアップ
 
 # 全体チェック
 check: fmt lint test ## フォーマット、リント、テストを実行
+
+# GitHub Actions CI をローカルで再現
+ci-local: ## GitHub Actions CI パイプラインをローカルで実行
+	@echo "🚀 GitHub Actions CI パイプラインをローカルで実行中..."
+	@echo ""
+	@echo "📋 Step 1: 依存関係をダウンロード"
+	@go mod download
+	@echo ""
+	@echo "🧪 Step 2: テストを実行"
+	@$(MAKE) test
+	@echo ""
+	@echo "📊 Step 3: テストカバレッジを生成"
+	@$(MAKE) test-coverage
+	@echo ""
+	@echo "🔍 Step 4: 静的解析を実行"
+	@$(MAKE) lint
+	@echo ""
+	@echo "🔨 Step 5: ビルドを実行"
+	@$(MAKE) build
+	@echo ""
+	@echo "⚡ Step 6: ベンチマークを実行（基本）"
+	@$(MAKE) benchmark
+	@echo ""
+	@echo "✅ GitHub Actions CI パイプライン完了！"
+	@echo "   すべてのステップが正常に完了しました。"
+	@echo "   GitHub Actionsでも同様に成功するはずです。"
 
 # ヘルプ
 help: ## このヘルプを表示
