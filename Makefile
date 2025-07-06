@@ -12,6 +12,11 @@ endif
 
 .PHONY: build test test-coverage benchmark benchmark-large benchmark-realistic setup_benchmark lint fmt clean clean-all clean-testdata install-deps setup mod-tidy check ci-local ci-full help
 
+# フルCIワークフロー
+ci-full: ## テスト、静的解析、ビルドを実行
+	$(MAKE) lint
+	$(MAKE) test
+	$(MAKE) build
 # デフォルトターゲット
 .DEFAULT_GOAL := help
 
