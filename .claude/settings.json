@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod:*)",
+      "Bash(direnv allow:*)",
+      "Bash(find:*)",
+      "Bash(go mod:*)",
+      "Bash(go test:*)",
+      "Bash(go:*)",
+      "Bash(golangci-lint run:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(make:*)",
+      "Bash(mkdir:*)",
+      "Bash(rm:*)",
+      "Bash(source:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:golangci-lint.run)",
+      "WebFetch(domain:registry.opendata.aws)",
+      "WebFetch(domain:tech.davis-hansson.com)",
+      "WebFetch(domain:tech.davis-hansson.com)"
+    ],
+    "deny": [
+      {
+        "path": ".golangci.yml",
+        "reason": "Linter configuration changes are prohibited"
+      }
+    ]
+  }
+}
