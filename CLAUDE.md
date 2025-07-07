@@ -42,8 +42,11 @@ patricia-trie/
 ├── .claude/
 │   └── settings.json
 ├── cmd/
-│   └── example/
-│       └── main.go
+│   ├── example/
+│   │   └── main.go
+│   └── patricia-repl/
+│       ├── main.go
+│       └── README.md
 ├── pkg/
 │   └── patriciatrie/
 │       ├── trie.go
