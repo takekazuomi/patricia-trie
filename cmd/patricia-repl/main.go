@@ -292,7 +292,7 @@ func buildTrie(path string) (*patriciatrie.Trie, BuildStats, error) {
 	
 	start := time.Now()
 	
-	file, err := os.Open(path) // #nosec G304 - path is provided by user
+	file, err := os.Open(path) // #nosec G304 - ユーザーがコマンドライン引数で指定したワードリストファイルのパスなので安全
 	if err != nil {
 		return nil, BuildStats{}, fmt.Errorf("failed to open file: %w", err)
 	}
@@ -366,7 +366,7 @@ func searchWithStats(trie *patriciatrie.Trie, prefix string, verbose bool) ([]st
 func loadHistory() {
 	historyFile := getHistoryFile()
 
-	file, err := os.Open(historyFile) // #nosec G304
+	file, err := os.Open(historyFile) // #nosec G304 - 内部で生成される履歴ファイルのパス（~/.config/patricia-repl/history）なので安全
 	if err != nil {
 		// ファイルが存在しない場合は無視
 		return
@@ -389,12 +389,12 @@ func saveHistory() {
 	// ディレクトリが存在しない場合は作成
 	dir := filepath.Dir(historyFile)
 	
-	err := os.MkdirAll(dir, dirPermission) // #nosec G301 - group/other read not needed
+	err := os.MkdirAll(dir, dirPermission) // #nosec G301 - dirPermission=0750で適切な権限設定済み、設定ディレクトリにグループ・その他の読み取り権限は不要
 	if err != nil {
 		return
 	}
 
-	file, err := os.Create(historyFile) // #nosec G304
+	file, err := os.Create(historyFile) // #nosec G304 - 内部で生成される履歴ファイルのパス（~/.config/patricia-repl/history）への書き込みなので安全
 	if err != nil {
 		return
 	}
