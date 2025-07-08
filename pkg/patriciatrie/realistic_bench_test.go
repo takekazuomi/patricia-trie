@@ -501,7 +501,7 @@ func BenchmarkTrie_Large_Japanese_Specialized(b *testing.B) {
 
 // BenchmarkTrie_Mixed_Workload 混合ワークロード（日本語+IPv4）
 func BenchmarkTrie_Mixed_Workload(b *testing.B) {
-	japanese, err1 := loadWordsFromFile("testdata/japanese/1000.csv")
+	japanese, err1 := loadWordsFromFile("testdata/japanese/1000.txt")
 
 	ipv4, err2 := loadWordsFromFile("testdata/ipaddresses/ipv4_10k.txt")
 	if err1 != nil || err2 != nil {

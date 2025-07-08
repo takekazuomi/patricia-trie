@@ -23,8 +23,10 @@
 
 **データ特性:**
 
-- コア辞書: ~100K語
-- 拡張辞書: ~1M語  
+- Small辞書: 約57万語
+- Core辞書: 約82万語
+- NotCore辞書: 約124万語
+- Full辞書: 約259万語（全辞書統合）
 - 文字種: ひらがな、カタカナ、漢字
 - 語長分布: 1〜20文字程度
 - 共通プレフィックス: 自然言語特有のパターン
@@ -151,8 +153,14 @@ make setup_benchmark
 ```text
 testdata/
 ├── japanese/
-│   ├── 1000.csv              # 小規模テスト用 1K語（漢字開始のみ）
-│   └── all.csv               # ベンチマーク用 全語彙（約57万語）
+│   ├── small_lex.zip         # ダウンロード元ファイル
+│   ├── core_lex.zip          # ダウンロード元ファイル
+│   ├── notcore_lex.zip       # ダウンロード元ファイル
+│   ├── 1000.txt              # テスト用 1K語（漢字開始のみ）
+│   ├── small.txt             # Small辞書（約57万語）
+│   ├── core.txt              # Core辞書（約82万語）
+│   ├── notcore.txt           # NotCore辞書（約124万語）
+│   └── full.txt              # 全辞書統合（約259万語）
 └── ipaddresses/
     ├── ipv4_10k.txt          # IPv4 10K個
     ├── ipv4_100k.txt         # IPv4 100K個  
@@ -183,11 +191,14 @@ make clean-testdata
 #### 日本語辞書処理
 
 ```bash
-# CSVファイルから表層形（1列目）を抽出
-cut -d',' -f1 small_lex.csv | grep -v '^$' | sort -u
+# CSVファイルから表層形（1列目）を抽出しTXTファイル作成
+cut -d',' -f1 small_lex.csv | grep -v '^$' | sort -u > small.txt
 
-# 小規模テスト用: 漢字で始まる単語のみを抽出
-grep -P '^[\x{4e00}-\x{9fa5}]' temp_words.txt | head -1000
+# テスト用: 漢字で始まる単語のみを抽出
+grep -P '^[\x{4e00}-\x{9fa5}]' small.txt | head -1000 > 1000.txt
+
+# 全辞書統合（重複削除）
+sort -u small.txt core.txt notcore.txt > full.txt
 ```
 
 #### IPアドレス生成  

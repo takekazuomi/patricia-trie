@@ -68,6 +68,20 @@ patricia-trie/
     ├── .gitignore
     ├── README.md
     ├── japanese/
+    │   ├── small_lex.zip         # Sudachi辞書（ダウンロード元）
+    │   ├── core_lex.zip          # Sudachi辞書（ダウンロード元）
+    │   ├── notcore_lex.zip       # Sudachi辞書（ダウンロード元）
+    │   ├── 1000.txt              # テスト用漢字語彙（1K語）
+    │   ├── small.txt             # Small辞書（約57万語）
+    │   ├── core.txt              # Core辞書（約82万語）
+    │   ├── notcore.txt           # NotCore辞書（約124万語）
+    │   └── full.txt              # 全辞書統合（約259万語）
+    └── ipaddresses/
+        ├── ipv4_10k.txt          # IPv4アドレス（10K個）
+        ├── ipv4_100k.txt         # IPv4アドレス（100K個）
+        ├── ipv6_10k.txt          # IPv6アドレス（10K個）
+        └── ipv6_100k.txt         # IPv6アドレス（100K個）
+    ├── japanese/
     └── ipaddresses/
 ```
 
