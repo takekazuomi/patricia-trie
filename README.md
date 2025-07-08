@@ -116,6 +116,7 @@ make benchmark
 - ✅ 検索操作（Search）
 - ✅ 削除操作（Delete）
 - ✅ プレフィックス検索（FindByPrefix）
+- ✅ REPL（対話的検索）ツール
 
 ## 使用例
 
@@ -160,6 +161,39 @@ func main() {
 }
 ```
 
+## REPLツール
+
+対話的な前方一致検索ツールが利用可能。
+
+### 基本的な使用方法
+
+```bash
+# ビルド
+make build-repl
+
+# 基本使用
+./bin/patricia-repl wordlist.txt
+
+# Verboseモードで起動（構築統計表示）
+./bin/patricia-repl -v wordlist.txt
+```
+
+### REPLの機能
+
+- **対話的検索**: 任意の文字列で前方一致検索を実行
+- **コマンド補完**: `/`で始まるコマンドをTab補完
+- **履歴機能**: 検索履歴を自動保存（~/.config/patricia-repl/history）
+- **Emacsキーバインド**: Ctrl+A, Ctrl+E等の標準キーバインド
+- **統計情報**: Verboseモードで検索時間やメモリ使用量を表示
+
+### REPLコマンド
+
+- `/help`: ヘルプメッセージとキーバインド一覧を表示
+- `/verbose`: Verboseモードの切り替え
+- `/exit`, `/quit`: REPLを終了
+
+詳細は[cmd/patricia-repl/README.md](cmd/patricia-repl/README.md)を参照。
+
 ## ベンチマーク
 
 ### 基本ベンチマーク
@@ -203,13 +237,15 @@ make check         # fmt, lint, testを一括実行
 
 ```text
 patricia-trie/
-├── pkg/patriciatrie/     # パトリシアトライ実装
-│   ├── trie.go          # メインのトライ構造
-│   ├── node.go          # ノード構造
-│   └── *_test.go        # テストファイル
-├── cmd/example/         # 使用例
-├── testdata/            # テスト用データ
-└── docs/                # ドキュメント
+├── pkg/patriciatrie/        # パトリシアトライ実装
+│   ├── trie.go             # メインのトライ構造
+│   ├── node.go             # ノード構造
+│   └── *_test.go           # テストファイル
+├── cmd/
+│   ├── example/            # 使用例
+│   └── patricia-repl/      # REPLツール
+├── testdata/               # テスト用データ
+└── docs/                   # ドキュメント
 ```
 
 ## 貢献

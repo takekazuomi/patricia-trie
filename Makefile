@@ -10,7 +10,7 @@ ifeq ($(origin .RECIPEPREFIX), undefined)
   $(error This Make does not support .RECIPEPREFIX. Please use GNU Make 4.0 or later)
 endif
 
-.PHONY: build test test-coverage benchmark benchmark-large benchmark-realistic setup_benchmark lint fmt clean clean-all clean-testdata install-deps setup mod-tidy check ci-local ci-full help
+.PHONY: build build-example build-repl test test-coverage benchmark benchmark-large benchmark-realistic setup_benchmark lint fmt clean clean-all clean-testdata install-deps setup mod-tidy check ci-local ci-full help
 
 # フルCIワークフロー
 ci-full: ## テスト、静的解析、ビルドを実行
@@ -21,13 +21,19 @@ ci-full: ## テスト、静的解析、ビルドを実行
 .DEFAULT_GOAL := help
 
 # 変数定義
-BINARY_NAME := patricia-trie
+EXAMPLE_BINARY := patricia-trie-example
+REPL_BINARY := patricia-repl
 COVERAGE_OUT := coverage.out
 COVERAGE_HTML := coverage.html
 
 # ビルド
-build: cmd/example/main.go ## バイナリをビルド
-	go build -o bin/$(BINARY_NAME) $<
+build: build-example build-repl ## すべてのバイナリをビルド
+
+build-example: cmd/example/main.go ## exampleバイナリをビルド
+	go build -o bin/$(EXAMPLE_BINARY) $<
+
+build-repl: cmd/patricia-repl/main.go ## REPLバイナリをビルド
+	go build -o bin/$(REPL_BINARY) $<
 
 # テスト
 test: ## テストを実行
@@ -75,6 +81,7 @@ mod-tidy: ## go mod tidyを実行
 clean: ## 生成されたファイルを削除
 	rm -rf bin/
 	rm -f $(COVERAGE_OUT) $(COVERAGE_HTML)
+	rm -f repl patricia-repl
 
 # 完全クリーンアップ
 clean-all: clean ## 依存ツールも含めて完全削除

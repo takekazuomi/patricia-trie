@@ -1,3 +1,4 @@
 tmp/
 *.prof
 .claude/settings.local.json
+bin/
