@@ -18,6 +18,8 @@ func BenchmarkTrie_Japanese_Insert(b *testing.B) {
 	}{
 		{"Test_1K", "testdata/japanese/1000.csv"},
 		{"Bench_All", "testdata/japanese/all.csv"},
+		{"Large_Bench", "testdata/japanese/large_bench.csv"},
+		{"Mega_Bench", "testdata/japanese/mega_bench.csv"},
 	}
 
 	for _, dataset := range datasets {
@@ -50,6 +52,8 @@ func BenchmarkTrie_Japanese_Search(b *testing.B) {
 	}{
 		{"Test_1K", "testdata/japanese/1000.csv"},
 		{"Bench_All", "testdata/japanese/all.csv"},
+		{"Large_Bench", "testdata/japanese/large_bench.csv"},
+		{"Mega_Bench", "testdata/japanese/mega_bench.csv"},
 	}
 
 	for _, dataset := range datasets {
@@ -77,30 +81,43 @@ func BenchmarkTrie_Japanese_Search(b *testing.B) {
 
 // BenchmarkTrie_Japanese_PrefixSearch 日本語データでのプレフィックス検索
 func BenchmarkTrie_Japanese_PrefixSearch(b *testing.B) {
-	words, err := loadWordsFromFile("testdata/japanese/all.csv")
-	if err != nil {
-		b.Skipf("テストデータが見つかりません (make setup_benchmarkを実行してください)")
+	datasets := []struct {
+		name string
+		file string
+	}{
+		{"All", "testdata/japanese/all.csv"},
+		{"Large", "testdata/japanese/large_bench.csv"},
+		{"Mega", "testdata/japanese/mega_bench.csv"},
 	}
 
-	trie := New()
-	for _, word := range words {
-		_ = trie.Insert(word)
-	}
+	for _, dataset := range datasets {
+		b.Run(dataset.name, func(b *testing.B) {
+			words, err := loadWordsFromFile(dataset.file)
+			if err != nil {
+				b.Skipf("テストデータが見つかりません: %s (make setup_benchmarkを実行してください)", dataset.file)
+			}
 
-	// 様々な長さのプレフィックスを準備
-	prefixLengths := []int{1, 2, 3, 4}
+			trie := New()
+			for _, word := range words {
+				_ = trie.Insert(word)
+			}
 
-	for _, prefixLen := range prefixLengths {
-		b.Run(fmt.Sprintf("PrefixLen_%d", prefixLen), func(b *testing.B) {
-			prefixes := generateJapanesePrefixes(words, prefixLen, 1000)
+			// 様々な長さのプレフィックスを準備
+			prefixLengths := []int{1, 2, 3, 4}
 
-			b.ResetTimer()
-			b.ReportAllocs()
+			for _, prefixLen := range prefixLengths {
+				b.Run(fmt.Sprintf("PrefixLen_%d", prefixLen), func(b *testing.B) {
+					prefixes := generateJapanesePrefixes(words, prefixLen, 1000)
 
-			for i := range b.N {
-				prefix := prefixes[i%len(prefixes)]
-				results := trie.FindByPrefix(prefix)
-				_ = results
+					b.ResetTimer()
+					b.ReportAllocs()
+
+					for i := range b.N {
+						prefix := prefixes[i%len(prefixes)]
+						results := trie.FindByPrefix(prefix)
+						_ = results
+					}
+				})
 			}
 		})
 	}
@@ -282,6 +299,8 @@ func BenchmarkTrie_Japanese_Memory(b *testing.B) {
 	}{
 		{"Test_1K", "testdata/japanese/1000.csv"},
 		{"Bench_All", "testdata/japanese/all.csv"},
+		{"Large_Bench", "testdata/japanese/large_bench.csv"},
+		{"Mega_Bench", "testdata/japanese/mega_bench.csv"},
 	}
 
 	for _, dataset := range datasets {
@@ -399,6 +418,78 @@ func BenchmarkTrie_IPv6_Memory(b *testing.B) {
 				b.ReportMetric(float64(memUsed)/float64(len(ips)), "bytes/address")
 				b.ReportMetric(float64(len(ips)), "addresses")
 			}
+		})
+	}
+}
+
+// BenchmarkTrie_Large_Japanese_Specialized 大規模日本語データ専用ベンチマーク
+func BenchmarkTrie_Large_Japanese_Specialized(b *testing.B) {
+	// 大規模データのみを対象とした特別なベンチマーク
+	datasets := []struct {
+		name        string
+		file        string
+		description string
+	}{
+		{"Core_250W", "testdata/japanese/large_bench.csv", "small+core辞書（約250万語）"},
+		{"Full_800W", "testdata/japanese/mega_bench.csv", "全辞書統合（約800万語）"},
+	}
+
+	for _, dataset := range datasets {
+		b.Run(dataset.name, func(b *testing.B) {
+			words, err := loadWordsFromFile(dataset.file)
+			if err != nil {
+				b.Skipf("テストデータが見つかりません: %s (make setup_benchmarkを実行してください)", dataset.file)
+			}
+
+			b.Logf("データセット: %s - %d語", dataset.description, len(words))
+
+			b.Run("Insert", func(b *testing.B) {
+				b.ResetTimer()
+				b.ReportAllocs()
+
+				for range b.N {
+					trie := New()
+					for _, word := range words {
+						_ = trie.Insert(word)
+					}
+				}
+
+				b.ReportMetric(float64(len(words)), "words")
+			})
+
+			b.Run("Search", func(b *testing.B) {
+				trie := New()
+				for _, word := range words {
+					_ = trie.Insert(word)
+				}
+
+				b.ResetTimer()
+				b.ReportAllocs()
+
+				for i := range b.N {
+					word := words[i%len(words)]
+					_ = trie.Search(word)
+				}
+			})
+
+			b.Run("PrefixSearch", func(b *testing.B) {
+				trie := New()
+				for _, word := range words {
+					_ = trie.Insert(word)
+				}
+
+				// 2文字のプレフィックスを生成
+				prefixes := generateJapanesePrefixes(words, 2, 1000)
+
+				b.ResetTimer()
+				b.ReportAllocs()
+
+				for i := range b.N {
+					prefix := prefixes[i%len(prefixes)]
+					results := trie.FindByPrefix(prefix)
+					_ = results
+				}
+			})
 		})
 	}
 }

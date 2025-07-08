@@ -452,7 +452,37 @@ try (BufferedReader reader = Files.newBufferedReader(
 4. **正規化**: 見出し（TRIE用）の正規化は自動適用されます
 5. **連接ID**: UniDic-mecab 2.1.2のIDを使用します
 
-## 10. まとめ
+## 10. Patricia Trieでの活用
+
+このSudachi辞書データは、Patricia Trieプロジェクトの大規模単語リスト対応（Issue #15）で活用されています。
+
+### 実装における活用例
+
+```go
+// 大規模日本語辞書を使用したベンチマーク例
+func BenchmarkTrie_Large_Japanese_Specialized(b *testing.B) {
+    datasets := []struct {
+        name        string
+        file        string
+        description string
+    }{
+        {"Core_250W", "testdata/japanese/large_bench.csv", "small+core辞書（約250万語）"},
+        {"Full_800W", "testdata/japanese/mega_bench.csv", "全辞書統合（約800万語）"},
+    }
+    // ...
+}
+```
+
+### データ規模とパフォーマンス特性
+
+- **small_lex**: 約50万語 - 基本性能測定
+- **core_lex**: 約200万語 - 中規模性能測定
+- **notcore_lex**: 約300万語 - 専門用語対応
+- **統合辞書**: 約800万語 - 大規模性能測定
+
+これらの実世界データを使用することで、Patricia Trieの実用的な性能特性を評価できます。
+
+## 11. まとめ
 
 Sudachi辞書のCSVフォーマットは、高度な日本語形態素解析を実現するための詳細な言語情報を含んでいます。本仕様書に基づいて辞書データを作成・編集することで、Sudachiの高精度な解析性能を活用できます。最新の情報については、必ず公式GitHubリポジトリを確認してください。
 
@@ -663,8 +693,46 @@ AWSのOepn Data Sponsorship Program によりホストされています。<http
 
 また、定期的に更新され、最新版は、<https://d2ej7fkh96fzlu.cloudfront.net/sudachidict-raw/index.html> で確認できます。
 
-2025/7/6時点ので最新版は、下記コマンドで取得でき、約40Mあります。
+### CloudFront CDN配布構造
+
+```text
+https://d2ej7fkh96fzlu.cloudfront.net/sudachidict-raw/
+├── index.html              # バージョン一覧
+└── <バージョン>/          # 例: 20250515/
+    ├── small_lex.zip       # 基本語彙（約40MB）
+    ├── core_lex.zip        # 追加語彙（約21MB）
+    ├── notcore_lex.zip     # 専門語彙（約35MB）
+    └── matrix.def.zip      # 接続行列ファイル
+```
+
+### 辞書ファイルの規模と内容
+
+1. **small_lex.zip**（基本語彙）
+   - ファイルサイズ: 約40MB
+   - 内容: UniDicベースの基本語彙（約50万エントリー）
+   - 用途: 一般的な日本語解析に必要な最小限の辞書
+
+2. **core_lex.zip**（追加語彙）
+   - ファイルサイズ: 約21MB
+   - 内容: NEologdベースの追加語彙（約200万エントリー）
+   - 用途: より高精度な解析のための一般語彙の拡充
+
+3. **notcore_lex.zip**（専門語彙）
+   - ファイルサイズ: 約35MB
+   - 内容: 固有名詞・専門用語（約300万エントリー）
+   - 用途: 専門分野や固有名詞の認識精度向上
+
+### ダウンロード例
+
+2025/7/6時点での最新版（20250515）の取得:
 
 ```bash
+# 基本語彙のみ
 curl -sOL https://d2ej7fkh96fzlu.cloudfront.net/sudachidict-raw/20250515/small_lex.zip
+
+# 全辞書ファイルの一括取得
+base_url="https://d2ej7fkh96fzlu.cloudfront.net/sudachidict-raw/20250515"
+curl -sOL "${base_url}/small_lex.zip"
+curl -sOL "${base_url}/core_lex.zip"
+curl -sOL "${base_url}/notcore_lex.zip"
 ```
