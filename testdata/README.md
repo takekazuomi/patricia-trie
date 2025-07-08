@@ -7,16 +7,17 @@
 ```text
 testdata/
 ├── japanese/           # 日本語辞書データ
-│   ├── small_words.txt       # small_lex.csvから抽出（基本語彙、約50万語）
-│   ├── core_words.txt        # core_lex.csvから抽出（追加語彙、約200万語）
-│   ├── notcore_words.txt     # notcore_lex.csvから抽出（専門語彙、約300万語）
-│   ├── full_words.txt        # 全辞書統合（重複削除、約800万語）
-│   ├── 1000.csv              # テスト用（1000語）
-│   ├── all.csv               # ベンチマーク用（small_lexのみ）
-│   ├── large_bench.csv       # 大規模ベンチマーク用（small+core、約250万語）
-│   ├── mega_bench.csv        # 超大規模ベンチマーク用（全辞書統合、約800万語）
-│   ├── full_bench.csv        # Full辞書ベンチマーク用（全辞書統合、約800万語）
-│   └── full_words.txt        # 全辞書語彙のみ（重複削除済み、約260万語）
+│   ├── small_lex.zip         # small_lex辞書（zip）
+│   ├── core_lex.zip          # core_lex辞書（zip）
+│   ├── notcore_lex.zip       # notcore_lex辞書（zip）
+│   ├── small_lex.csv         # small_lex辞書（CSV、展開済み）
+│   ├── core_lex.csv          # core_lex辞書（CSV、展開済み）
+│   ├── notcore_lex.csv       # notcore_lex辞書（CSV、展開済み）
+│   ├── small.txt             # small_lex見出し語のみ（約57万語）
+│   ├── core.txt              # core_lex見出し語のみ（約82万語）
+│   ├── notcore.txt           # notcore_lex見出し語のみ（約124万語）
+│   ├── 1000.txt              # テスト用漢字語彙（1000語）
+│   └── full.txt              # 全辞書統合（重複削除、約259万語）
 └── ipaddresses/        # IPアドレスデータ
     ├── ipv4_10k.txt          # IPv4 10K個
     ├── ipv4_100k.txt         # IPv4 100K個
@@ -85,12 +86,11 @@ comm -12 <(sort small_lex.csv) <(sort core_lex.csv) | wc -l
 
 | ファイル | 内容 | 語数 | 用途 |
 |---------|------|------|------|
-| `1000.csv` | 漢字で始まる単語（テスト用） | 1,000語 | 単体テスト |
-| `all.csv` | small_lex辞書 | 約50万語 | 基本ベンチマーク |
-| `large_bench.csv` | small+core辞書 | 約250万語 | 大規模ベンチマーク |
-| `mega_bench.csv` | 全辞書統合 | 約800万語 | 超大規模ベンチマーク |
-| `full_bench.csv` | 全辞書統合 | 約800万語 | Full辞書ベンチマーク |
-| `full_words.txt` | 全辞書語彙のみ | 約260万語 | 語彙ベンチマーク |
+| `1000.txt` | 漢字で始まる単語（テスト用） | 1,000語 | 単体テスト |
+| `small.txt` | small_lex見出し語のみ | 約57万語 | 基本ベンチマーク |
+| `core.txt` | core_lex見出し語のみ | 約82万語 | 中規模ベンチマーク |
+| `notcore.txt` | notcore_lex見出し語のみ | 約124万語 | 大規模ベンチマーク |
+| `full.txt` | 全辞書統合（重複削除） | 約259万語 | 超大規模ベンチマーク |
 
 ### IPアドレスデータ
 
@@ -120,15 +120,15 @@ make benchmark-realistic
 
 `BenchmarkTrie_Large_Japanese_Specialized`では、以下の大規模データセットを使用：
 
-- **Core_250W**: small+core辞書（約250万語）
-- **Full_800W**: 全辞書統合（約800万語）
-- **Full_Words**: 全辞書語彙のみ（約260万語）
+- **Core**: core_lex見出し語のみ（約82万語）
+- **NotCore**: notcore_lex見出し語のみ（約124万語）
+- **Full**: 全辞書統合（約259万語）
 
 各データセットで挿入、検索、プレフィックス検索の性能を測定します。
 
-### データ形式の違い
+### データ形式の統一
 
-- **CSVファイル**: 完全な辞書情報（品詞、読み等を含む18フィールド）
-- **TXTファイル**: 語彙のみ（見出し語のみ、重複削除済み）
+- **TXTファイル**: 見出し語のみ（重複削除済み）
+- **CSVファイル**: 元の辞書データ（品詞、読み等を含む18フィールド）
 
-語彙のみのベンチマークには`full_words.txt`を使用し、完全な辞書データのベンチマークには`mega_bench.csv`や`full_bench.csv`を使用します。
+ベンチマークでは統一的に見出し語のみのTXTファイルを使用し、CSV解析のオーバーヘッドを排除した純粋な語彙性能を測定します。

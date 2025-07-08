@@ -16,11 +16,11 @@ func BenchmarkTrie_Japanese_Insert(b *testing.B) {
 		name string
 		file string
 	}{
-		{"Test_1K", "testdata/japanese/1000.csv"},
-		{"Bench_All", "testdata/japanese/all.csv"},
-		{"Large_Bench", "testdata/japanese/large_bench.csv"},
-		{"Mega_Bench", "testdata/japanese/mega_bench.csv"},
-		{"Full_Words", "testdata/japanese/full_words.txt"},
+		{"Test_1K", "testdata/japanese/1000.txt"},
+		{"Small", "testdata/japanese/small.txt"},
+		{"Core", "testdata/japanese/core.txt"},
+		{"NotCore", "testdata/japanese/notcore.txt"},
+		{"Full", "testdata/japanese/full.txt"},
 	}
 
 	for _, dataset := range datasets {
@@ -51,11 +51,11 @@ func BenchmarkTrie_Japanese_Search(b *testing.B) {
 		name string
 		file string
 	}{
-		{"Test_1K", "testdata/japanese/1000.csv"},
-		{"Bench_All", "testdata/japanese/all.csv"},
-		{"Large_Bench", "testdata/japanese/large_bench.csv"},
-		{"Mega_Bench", "testdata/japanese/mega_bench.csv"},
-		{"Full_Words", "testdata/japanese/full_words.txt"},
+		{"Test_1K", "testdata/japanese/1000.txt"},
+		{"Small", "testdata/japanese/small.txt"},
+		{"Core", "testdata/japanese/core.txt"},
+		{"NotCore", "testdata/japanese/notcore.txt"},
+		{"Full", "testdata/japanese/full.txt"},
 	}
 
 	for _, dataset := range datasets {
@@ -87,10 +87,10 @@ func BenchmarkTrie_Japanese_PrefixSearch(b *testing.B) {
 		name string
 		file string
 	}{
-		{"All", "testdata/japanese/all.csv"},
-		{"Large", "testdata/japanese/large_bench.csv"},
-		{"Mega", "testdata/japanese/mega_bench.csv"},
-		{"Full", "testdata/japanese/full_words.txt"},
+		{"Small", "testdata/japanese/small.txt"},
+		{"Core", "testdata/japanese/core.txt"},
+		{"NotCore", "testdata/japanese/notcore.txt"},
+		{"Full", "testdata/japanese/full.txt"},
 	}
 
 	for _, dataset := range datasets {
@@ -300,11 +300,11 @@ func BenchmarkTrie_Japanese_Memory(b *testing.B) {
 		name string
 		file string
 	}{
-		{"Test_1K", "testdata/japanese/1000.csv"},
-		{"Bench_All", "testdata/japanese/all.csv"},
-		{"Large_Bench", "testdata/japanese/large_bench.csv"},
-		{"Mega_Bench", "testdata/japanese/mega_bench.csv"},
-		{"Full_Words", "testdata/japanese/full_words.txt"},
+		{"Test_1K", "testdata/japanese/1000.txt"},
+		{"Small", "testdata/japanese/small.txt"},
+		{"Core", "testdata/japanese/core.txt"},
+		{"NotCore", "testdata/japanese/notcore.txt"},
+		{"Full", "testdata/japanese/full.txt"},
 	}
 
 	for _, dataset := range datasets {
@@ -434,9 +434,9 @@ func BenchmarkTrie_Large_Japanese_Specialized(b *testing.B) {
 		file        string
 		description string
 	}{
-		{"Core_250W", "testdata/japanese/large_bench.csv", "small+core辞書（約250万語）"},
-		{"Full_800W", "testdata/japanese/mega_bench.csv", "全辞書統合（約800万語）"},
-		{"Full_Words", "testdata/japanese/full_words.txt", "全辞書語彙のみ（約260万語）"},
+		{"Core", "testdata/japanese/core.txt", "Core辞書（約82万語）"},
+		{"NotCore", "testdata/japanese/notcore.txt", "NotCore辞書（約124万語）"},
+		{"Full", "testdata/japanese/full.txt", "Full辞書（約259万語）"},
 	}
 
 	for _, dataset := range datasets {

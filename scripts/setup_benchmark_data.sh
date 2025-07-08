@@ -14,14 +14,13 @@ setup_japanese_data() {
     echo "📚 日本語辞書データをセットアップ中..."
     
     local japanese_dir="${TESTDATA_DIR}/japanese"
-    local test_file="${japanese_dir}/1000.csv"
-    local bench_file="${japanese_dir}/all.csv"
+    local test_file="${japanese_dir}/1000.txt"
     
     # 各辞書ファイルの単語リスト
-    local small_words="${japanese_dir}/small_words.txt"
-    local core_words="${japanese_dir}/core_words.txt"
-    local notcore_words="${japanese_dir}/notcore_words.txt"
-    local full_words="${japanese_dir}/full_words.txt"
+    local small_words="${japanese_dir}/small.txt"
+    local core_words="${japanese_dir}/core.txt"
+    local notcore_words="${japanese_dir}/notcore.txt"
+    local full_words="${japanese_dir}/full.txt"
     
     # 全ての辞書ファイルをダウンロード・処理
     if [ ! -f "${full_words}" ]; then
@@ -65,67 +64,32 @@ setup_japanese_data() {
         sort -u "${small_words}" "${core_words}" "${notcore_words}" > "${full_words}"
         echo "  ✅ 統合辞書: $(wc -l < "${full_words}")語"
         
-        # テスト用ファイル作成（既存の処理を維持）
+        # テスト用ファイル作成（1000語）- 漢字で始まる単語のみ
         if [ ! -f "${test_file}" ]; then
-            # 小規模テスト用（1000語）- 漢字で始まる単語のみ
+            echo "  🔄 テスト用データを作成中..."
             grep -P '^[\x{4e00}-\x{9fa5}]' "${small_words}" | head -1000 > "${test_file}"
-        fi
-        
-        # ベンチマーク用ファイル（small_lexのみ、既存の処理を維持）
-        if [ ! -f "${bench_file}" ]; then
-            cp "${small_words}" "${bench_file}"
-        fi
-        
-        # 大規模ベンチマーク用データファイル作成
-        local large_bench_file="${japanese_dir}/large_bench.csv"
-        local mega_bench_file="${japanese_dir}/mega_bench.csv"
-        
-        # large_bench.csv: core辞書まで含む（約250万語）
-        if [ ! -f "${large_bench_file}" ]; then
-            echo "  🔄 大規模ベンチマーク用データを作成中..."
-            sort -u "${small_words}" "${core_words}" > "${large_bench_file}"
-            echo "    ✅ 大規模ベンチマーク用: $(wc -l < "${large_bench_file}")語"
-        fi
-        
-        # mega_bench.csv: 全辞書統合（約800万語）
-        if [ ! -f "${mega_bench_file}" ]; then
-            echo "  🔄 超大規模ベンチマーク用データを作成中..."
-            cp "${full_words}" "${mega_bench_file}"
-            echo "    ✅ 超大規模ベンチマーク用: $(wc -l < "${mega_bench_file}")語"
-        fi
-        
-        # full_bench.csv: 全辞書統合（mega_benchのエイリアス）
-        local full_bench_file="${japanese_dir}/full_bench.csv"
-        if [ ! -f "${full_bench_file}" ]; then
-            echo "  🔄 Full辞書ベンチマーク用データを作成中..."
-            cp "${full_words}" "${full_bench_file}"
-            echo "    ✅ Full辞書ベンチマーク用: $(wc -l < "${full_bench_file}")語"
+            echo "    ✅ テスト用: $(wc -l < "${test_file}")語"
         fi
         
         echo "  ✅ 日本語辞書データを準備完了"
         echo "    - テスト用: $(wc -l < "${test_file}")語"
-        echo "    - ベンチマーク用（small）: $(wc -l < "${bench_file}")語"
-        echo "    - 大規模ベンチマーク用: $(wc -l < "${large_bench_file}")語"
-        echo "    - 超大規模ベンチマーク用: $(wc -l < "${mega_bench_file}")語"
-        echo "    - Full辞書ベンチマーク用: $(wc -l < "${full_bench_file}")語"
-        echo "    - フル辞書語彙: $(wc -l < "${full_words}")語"
+        echo "    - Small辞書: $(wc -l < "${small_words}")語"
+        echo "    - Core辞書: $(wc -l < "${core_words}")語"
+        echo "    - NotCore辞書: $(wc -l < "${notcore_words}")語"
+        echo "    - Full辞書: $(wc -l < "${full_words}")語"
     else
         echo "  ✅ 日本語辞書データは既に存在します"
         echo "    - テスト用: $(wc -l < "${test_file}")語"
-        echo "    - ベンチマーク用（small）: $(wc -l < "${bench_file}")語"
-        local large_bench_file="${japanese_dir}/large_bench.csv"
-        local mega_bench_file="${japanese_dir}/mega_bench.csv"
-        local full_bench_file="${japanese_dir}/full_bench.csv"
-        if [ -f "${large_bench_file}" ]; then
-            echo "    - 大規模ベンチマーク用: $(wc -l < "${large_bench_file}")語"
+        if [ -f "${small_words}" ]; then
+            echo "    - Small辞書: $(wc -l < "${small_words}")語"
         fi
-        if [ -f "${mega_bench_file}" ]; then
-            echo "    - 超大規模ベンチマーク用: $(wc -l < "${mega_bench_file}")語"
+        if [ -f "${core_words}" ]; then
+            echo "    - Core辞書: $(wc -l < "${core_words}")語"
         fi
-        if [ -f "${full_bench_file}" ]; then
-            echo "    - Full辞書ベンチマーク用: $(wc -l < "${full_bench_file}")語"
+        if [ -f "${notcore_words}" ]; then
+            echo "    - NotCore辞書: $(wc -l < "${notcore_words}")語"
         fi
-        echo "    - フル辞書語彙: $(wc -l < "${full_words}")語"
+        echo "    - Full辞書: $(wc -l < "${full_words}")語"
     fi
 }
 
