@@ -35,10 +35,23 @@ make setup_benchmark
 - **日本語辞書**: [Sudachi Language Resources](https://registry.opendata.aws/sudachi/) (Apache-2.0ライセンス)
   - **配布URL**: <https://d2ej7fkh96fzlu.cloudfront.net/sudachidict-raw/>
   - **最新版**: 20250515
-  - **small_lex.csv**: 基本語彙（約50万語、40MB）
-  - **core_lex.csv**: 追加語彙（約200万語、21MB）
-  - **notcore_lex.csv**: 専門語彙（約300万語、35MB）
+  - **公式リポジトリ**: [SudachiDict](https://github.com/WorksApplications/SudachiDict)、[Sudachi](https://github.com/WorksApplications/Sudachi)
+  - **small_lex.csv**: 基本語彙（約50万語、40MB）- UniDicベース
+  - **core_lex.csv**: 追加語彙（約200万語、21MB）- NEologdベース
+  - **notcore_lex.csv**: 専門語彙（約300万語、35MB）- 固有名詞・専門用語
 - **IPアドレス**: ランダム生成（IPv4/IPv6対応）
+
+### 辞書ファイルの関係性
+
+**重要**: 各CSVファイルは独立した辞書ファイルです。small_lexはcore_lexのサブセットではありません。
+
+- **独立性**: 各辞書ファイルは独立した語彙を持つ
+- **累積構造**: Core辞書 = small_lex + core_lex、Full辞書 = small_lex + core_lex + notcore_lex
+- **重複削除**: 統合時は`sort -u`による重複削除が必要
+
+根拠：
+- [SudachiDict公式](https://github.com/WorksApplications/SudachiDict): 「Core dictionary requires small and core files」
+- [Sudachi公式](https://github.com/WorksApplications/Sudachi): 辞書の累積構造を説明
 
 ## ベンチマークデータセット
 

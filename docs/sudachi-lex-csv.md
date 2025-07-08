@@ -294,15 +294,41 @@ def normalize_surface(text):
 
 ### システム辞書の3種類
 
+[SudachiDict公式リポジトリ](https://github.com/WorksApplications/SudachiDict)および[Sudachi本体](https://github.com/WorksApplications/Sudachi)によると、Sudachi辞書は以下の3種類で構成されています：
+
 1. **Small辞書**: UniDicの語彙のみ収録（small_lex.csv）
 2. **Core辞書**: 基本語彙収録（small_lex.csv + core_lex.csv）
 3. **Full辞書**: 固有名詞まで網羅的に収録（small_lex.csv + core_lex.csv + notcore_lex.csv）
 
-### ファイル構成
+### ファイル構成と関係性
 
-- **small_lex.csv**: 基本語彙（UniDicベース）
-- **core_lex.csv**: 追加語彙（NEologdベース）
-- **notcore_lex.csv**: 専門語彙・固有名詞
+**重要**: 各CSVファイルは独立した辞書ファイルです。small_lexはcore_lexのサブセットではありません。
+
+- **small_lex.csv**: 基本語彙（UniDicベース）- 独立した語彙ファイル
+- **core_lex.csv**: 追加語彙（NEologdベース）- 独立した語彙ファイル  
+- **notcore_lex.csv**: 専門語彙・固有名詞 - 独立した語彙ファイル
+
+### 辞書の累積構造
+
+公式仕様により、各辞書は以下のように累積的に構成されます：
+
+```text
+Small辞書: small_lex.csv
+Core辞書:  small_lex.csv + core_lex.csv
+Full辞書:  small_lex.csv + core_lex.csv + notcore_lex.csv
+```
+
+### 統合時の重複削除
+
+各辞書ファイルは独立しているため、統合時には重複する語彙が存在する可能性があります。そのため、以下のような重複削除処理が必要です：
+
+```bash
+# Core辞書構築（重複削除）
+sort -u small_lex.csv core_lex.csv > core_dict.csv
+
+# Full辞書構築（重複削除）
+sort -u small_lex.csv core_lex.csv notcore_lex.csv > full_dict.csv
+```
 
 ## 5. CSVフォーマット検証仕様
 
@@ -687,11 +713,18 @@ public class SudachiCSVReader {
 
 ## E. 配布
 
-AWSのOepn Data Sponsorship Program によりホストされています。<https://registry.opendata.aws/sudachi/>
+AWSのOpen Data Sponsorship Program によりホストされています。<https://registry.opendata.aws/sudachi/>
 
-ここでは、Cloudfront CDN mirror 経由でのアクセスを記載します。
+ここでは、CloudFront CDN mirror 経由でのアクセスを記載します。
 
 また、定期的に更新され、最新版は、<https://d2ej7fkh96fzlu.cloudfront.net/sudachidict-raw/index.html> で確認できます。
+
+### 辞書ファイルの関係性確認
+
+各辞書ファイルが独立している根拠：
+- [SudachiDict公式リポジトリ](https://github.com/WorksApplications/SudachiDict): 「Core dictionary requires small and core files」
+- [Sudachi公式ドキュメント](https://github.com/WorksApplications/Sudachi): 辞書の累積構造を説明
+- 配布サイト: <https://d2ej7fkh96fzlu.cloudfront.net/sudachidict-raw/> で各ファイルが個別に配布
 
 ### CloudFront CDN配布構造
 
