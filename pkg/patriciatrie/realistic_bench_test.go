@@ -20,6 +20,7 @@ func BenchmarkTrie_Japanese_Insert(b *testing.B) {
 		{"Bench_All", "testdata/japanese/all.csv"},
 		{"Large_Bench", "testdata/japanese/large_bench.csv"},
 		{"Mega_Bench", "testdata/japanese/mega_bench.csv"},
+		{"Full_Words", "testdata/japanese/full_words.txt"},
 	}
 
 	for _, dataset := range datasets {
@@ -54,6 +55,7 @@ func BenchmarkTrie_Japanese_Search(b *testing.B) {
 		{"Bench_All", "testdata/japanese/all.csv"},
 		{"Large_Bench", "testdata/japanese/large_bench.csv"},
 		{"Mega_Bench", "testdata/japanese/mega_bench.csv"},
+		{"Full_Words", "testdata/japanese/full_words.txt"},
 	}
 
 	for _, dataset := range datasets {
@@ -88,6 +90,7 @@ func BenchmarkTrie_Japanese_PrefixSearch(b *testing.B) {
 		{"All", "testdata/japanese/all.csv"},
 		{"Large", "testdata/japanese/large_bench.csv"},
 		{"Mega", "testdata/japanese/mega_bench.csv"},
+		{"Full", "testdata/japanese/full_words.txt"},
 	}
 
 	for _, dataset := range datasets {
@@ -301,6 +304,7 @@ func BenchmarkTrie_Japanese_Memory(b *testing.B) {
 		{"Bench_All", "testdata/japanese/all.csv"},
 		{"Large_Bench", "testdata/japanese/large_bench.csv"},
 		{"Mega_Bench", "testdata/japanese/mega_bench.csv"},
+		{"Full_Words", "testdata/japanese/full_words.txt"},
 	}
 
 	for _, dataset := range datasets {
@@ -432,6 +436,7 @@ func BenchmarkTrie_Large_Japanese_Specialized(b *testing.B) {
 	}{
 		{"Core_250W", "testdata/japanese/large_bench.csv", "small+core辞書（約250万語）"},
 		{"Full_800W", "testdata/japanese/mega_bench.csv", "全辞書統合（約800万語）"},
+		{"Full_Words", "testdata/japanese/full_words.txt", "全辞書語彙のみ（約260万語）"},
 	}
 
 	for _, dataset := range datasets {

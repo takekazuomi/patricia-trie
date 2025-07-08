@@ -14,7 +14,9 @@ testdata/
 │   ├── 1000.csv              # テスト用（1000語）
 │   ├── all.csv               # ベンチマーク用（small_lexのみ）
 │   ├── large_bench.csv       # 大規模ベンチマーク用（small+core、約250万語）
-│   └── mega_bench.csv        # 超大規模ベンチマーク用（全辞書統合、約800万語）
+│   ├── mega_bench.csv        # 超大規模ベンチマーク用（全辞書統合、約800万語）
+│   ├── full_bench.csv        # Full辞書ベンチマーク用（全辞書統合、約800万語）
+│   └── full_words.txt        # 全辞書語彙のみ（重複削除済み、約260万語）
 └── ipaddresses/        # IPアドレスデータ
     ├── ipv4_10k.txt          # IPv4 10K個
     ├── ipv4_100k.txt         # IPv4 100K個
@@ -87,6 +89,8 @@ comm -12 <(sort small_lex.csv) <(sort core_lex.csv) | wc -l
 | `all.csv` | small_lex辞書 | 約50万語 | 基本ベンチマーク |
 | `large_bench.csv` | small+core辞書 | 約250万語 | 大規模ベンチマーク |
 | `mega_bench.csv` | 全辞書統合 | 約800万語 | 超大規模ベンチマーク |
+| `full_bench.csv` | 全辞書統合 | 約800万語 | Full辞書ベンチマーク |
+| `full_words.txt` | 全辞書語彙のみ | 約260万語 | 語彙ベンチマーク |
 
 ### IPアドレスデータ
 
@@ -118,5 +122,13 @@ make benchmark-realistic
 
 - **Core_250W**: small+core辞書（約250万語）
 - **Full_800W**: 全辞書統合（約800万語）
+- **Full_Words**: 全辞書語彙のみ（約260万語）
 
 各データセットで挿入、検索、プレフィックス検索の性能を測定します。
+
+### データ形式の違い
+
+- **CSVファイル**: 完全な辞書情報（品詞、読み等を含む18フィールド）
+- **TXTファイル**: 語彙のみ（見出し語のみ、重複削除済み）
+
+語彙のみのベンチマークには`full_words.txt`を使用し、完全な辞書データのベンチマークには`mega_bench.csv`や`full_bench.csv`を使用します。

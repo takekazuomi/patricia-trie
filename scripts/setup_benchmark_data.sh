@@ -94,25 +94,38 @@ setup_japanese_data() {
             echo "    ✅ 超大規模ベンチマーク用: $(wc -l < "${mega_bench_file}")語"
         fi
         
+        # full_bench.csv: 全辞書統合（mega_benchのエイリアス）
+        local full_bench_file="${japanese_dir}/full_bench.csv"
+        if [ ! -f "${full_bench_file}" ]; then
+            echo "  🔄 Full辞書ベンチマーク用データを作成中..."
+            cp "${full_words}" "${full_bench_file}"
+            echo "    ✅ Full辞書ベンチマーク用: $(wc -l < "${full_bench_file}")語"
+        fi
+        
         echo "  ✅ 日本語辞書データを準備完了"
         echo "    - テスト用: $(wc -l < "${test_file}")語"
         echo "    - ベンチマーク用（small）: $(wc -l < "${bench_file}")語"
         echo "    - 大規模ベンチマーク用: $(wc -l < "${large_bench_file}")語"
         echo "    - 超大規模ベンチマーク用: $(wc -l < "${mega_bench_file}")語"
-        echo "    - フル辞書: $(wc -l < "${full_words}")語"
+        echo "    - Full辞書ベンチマーク用: $(wc -l < "${full_bench_file}")語"
+        echo "    - フル辞書語彙: $(wc -l < "${full_words}")語"
     else
         echo "  ✅ 日本語辞書データは既に存在します"
         echo "    - テスト用: $(wc -l < "${test_file}")語"
         echo "    - ベンチマーク用（small）: $(wc -l < "${bench_file}")語"
         local large_bench_file="${japanese_dir}/large_bench.csv"
         local mega_bench_file="${japanese_dir}/mega_bench.csv"
+        local full_bench_file="${japanese_dir}/full_bench.csv"
         if [ -f "${large_bench_file}" ]; then
             echo "    - 大規模ベンチマーク用: $(wc -l < "${large_bench_file}")語"
         fi
         if [ -f "${mega_bench_file}" ]; then
             echo "    - 超大規模ベンチマーク用: $(wc -l < "${mega_bench_file}")語"
         fi
-        echo "    - フル辞書: $(wc -l < "${full_words}")語"
+        if [ -f "${full_bench_file}" ]; then
+            echo "    - Full辞書ベンチマーク用: $(wc -l < "${full_bench_file}")語"
+        fi
+        echo "    - フル辞書語彙: $(wc -l < "${full_words}")語"
     fi
 }
 
