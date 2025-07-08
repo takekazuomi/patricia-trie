@@ -53,6 +53,7 @@ make setup_benchmark
 - **重複削除**: 統合時は`sort -u`による重複削除が必要
 
 根拠：
+
 - [SudachiDict公式](https://github.com/WorksApplications/SudachiDict): 「Core dictionary requires small and core files」
 - [Sudachi公式](https://github.com/WorksApplications/Sudachi): 辞書の累積構造を説明
 
@@ -66,10 +67,12 @@ make setup_benchmark
 | 語彙数 | 573,818語 | 819,383語 | 語彙重複: 17,607語 |
 
 **重複例**:
+
 - **完全重複**: サマセット、大庭、富士吉田（地名・人名）
 - **語彙重複**: 数字、記号、Unicode文字等
 
 **検証方法**:
+
 ```bash
 # 重複確認
 comm -12 <(sort small_lex.csv) <(sort core_lex.csv)

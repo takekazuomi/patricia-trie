@@ -347,18 +347,22 @@ sort -u small_lex.csv core_lex.csv notcore_lex.csv > full_dict.csv
 **完全な行レベルでの重複**（全フィールドが一致）：**3行のみ**
 
 重複した行の実例：
+
 1. **サマセット**（地名）
-   ```
+
+   ```csv
    サマセット,4792,4792,15000,サマセット,名詞,固有名詞,地名,一般,*,*,サマセット,サマセット,*,A,*,*,*,*
    ```
 
 2. **大庭**（人名・姓）
-   ```
+
+   ```csv
    大庭,4790,4790,10000,大庭,名詞,固有名詞,人名,姓,*,*,オオバ,大庭,*,A,*,*,*,*
    ```
 
 3. **富士吉田**（地名）
-   ```
+
+   ```csv
    富士吉田,4792,4792,15000,富士吉田,名詞,固有名詞,地名,一般,*,*,フジヨシダ,富士吉田,*,A,*,*,*,*
    ```
 
@@ -778,6 +782,7 @@ AWSのOpen Data Sponsorship Program によりホストされています。<http
 ### 辞書ファイルの関係性確認
 
 各辞書ファイルが独立している根拠：
+
 - [SudachiDict公式リポジトリ](https://github.com/WorksApplications/SudachiDict): 「Core dictionary requires small and core files」
 - [Sudachi公式ドキュメント](https://github.com/WorksApplications/Sudachi): 辞書の累積構造を説明
 - 配布サイト: <https://d2ej7fkh96fzlu.cloudfront.net/sudachidict-raw/> で各ファイルが個別に配布
