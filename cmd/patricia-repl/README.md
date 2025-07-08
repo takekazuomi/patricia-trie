@@ -32,7 +32,7 @@ go run cmd/patricia-repl/main.go <wordlist>
 
 2. **リアルタイム補完**
    - Tabキーで補完候補を表示
-   - トライ内の単語を動的に補完
+   - /で始まるコマンドのみ補完（検索候補は補完しない）
 
 ### REPLコマンド
 
