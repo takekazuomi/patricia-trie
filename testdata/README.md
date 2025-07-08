@@ -53,6 +53,30 @@ make setup_benchmark
 - [SudachiDict公式](https://github.com/WorksApplications/SudachiDict): 「Core dictionary requires small and core files」
 - [Sudachi公式](https://github.com/WorksApplications/Sudachi): 辞書の累積構造を説明
 
+### 実データ分析結果（20250515版）
+
+実際のsudachi辞書データを使用した重複分析：
+
+| 項目 | small_lex.csv | core_lex.csv | 重複状況 |
+|------|---------------|--------------|----------|
+| 総行数 | 765,611行 | 861,167行 | 完全重複: 3行 |
+| 語彙数 | 573,818語 | 819,383語 | 語彙重複: 17,607語 |
+
+**重複例**:
+- **完全重複**: サマセット、大庭、富士吉田（地名・人名）
+- **語彙重複**: 数字、記号、Unicode文字等
+
+**検証方法**:
+```bash
+# 重複確認
+comm -12 <(sort small_lex.csv) <(sort core_lex.csv)
+
+# 重複数
+comm -12 <(sort small_lex.csv) <(sort core_lex.csv) | wc -l
+```
+
+**結論**: 各辞書の独立性が実証され、統合時の重複削除処理の必要性が確認されました。
+
 ## ベンチマークデータセット
 
 ### 日本語辞書データ
