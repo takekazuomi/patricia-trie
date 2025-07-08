@@ -304,8 +304,8 @@ def normalize_surface(text):
 
 **重要**: 各CSVファイルは独立した辞書ファイルです。small_lexはcore_lexのサブセットではありません。
 
-- **small_lex.csv**: 基本語彙（UniDicベース）- 独立した語彙ファイル
-- **core_lex.csv**: 追加語彙（NEologdベース）- 独立した語彙ファイル  
+- **small_lex.csv**: 基本語彙 - 独立した語彙ファイル
+- **core_lex.csv**: 追加語彙 - 独立した語彙ファイル  
 - **notcore_lex.csv**: 専門語彙・固有名詞 - 独立した語彙ファイル
 
 ### 辞書の累積構造
@@ -742,12 +742,12 @@ https://d2ej7fkh96fzlu.cloudfront.net/sudachidict-raw/
 
 1. **small_lex.zip**（基本語彙）
    - ファイルサイズ: 約40MB
-   - 内容: UniDicベースの基本語彙（約50万エントリー）
+   - 内容: 基本語彙（約50万エントリー）
    - 用途: 一般的な日本語解析に必要な最小限の辞書
 
 2. **core_lex.zip**（追加語彙）
    - ファイルサイズ: 約21MB
-   - 内容: NEologdベースの追加語彙（約200万エントリー）
+   - 内容: 追加語彙（約200万エントリー）
    - 用途: より高精度な解析のための一般語彙の拡充
 
 3. **notcore_lex.zip**（専門語彙）
