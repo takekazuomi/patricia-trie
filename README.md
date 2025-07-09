@@ -202,7 +202,7 @@ make build-repl
 make benchmark
 ```
 
-### 大規模データベンチマーク（100万キー）
+### 大規模データベンチマーク（最大259万語）
 
 ```bash
 make setup_benchmark      # ベンチマークデータのセットアップ
@@ -210,6 +210,13 @@ make benchmark-large      # 大規模ベンチマークの実行
 ```
 
 ### 実世界データベンチマーク（日本語辞書・IPアドレス）
+
+日本語辞書データ（Sudachi）による実用的なベンチマーク：
+
+- **Small辞書**: 約57万語
+- **Core辞書**: 約82万語  
+- **NotCore辞書**: 約124万語
+- **Full辞書**: 約259万語（全辞書統合）
 
 ```bash
 make benchmark-realistic  # 実世界データベンチマークの実行

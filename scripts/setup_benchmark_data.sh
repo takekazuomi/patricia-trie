@@ -14,54 +14,82 @@ setup_japanese_data() {
     echo "📚 日本語辞書データをセットアップ中..."
     
     local japanese_dir="${TESTDATA_DIR}/japanese"
-    local test_file="${japanese_dir}/1000.csv"
-    local bench_file="${japanese_dir}/all.csv"
+    local test_file="${japanese_dir}/1000.txt"
     
-    # 小規模テスト用（1000語）と全データ用に分割
-    if [ ! -f "${test_file}" ] || [ ! -f "${bench_file}" ]; then
-        echo "  🔽 Sudachi辞書データ（small_lex.zip）をダウンロード中..."
+    # 各辞書ファイルの単語リスト
+    local small_words="${japanese_dir}/small.txt"
+    local core_words="${japanese_dir}/core.txt"
+    local notcore_words="${japanese_dir}/notcore.txt"
+    local full_words="${japanese_dir}/full.txt"
+    
+    # 全ての辞書ファイルをダウンロード・処理
+    if [ ! -f "${full_words}" ]; then
         mkdir -p "${japanese_dir}"
         
-        # Sudachi raw lexicon data をダウンロード
-        local temp_file="${japanese_dir}/small_lex.zip"
-        curl -L -o "${temp_file}" \
-            "https://d2ej7fkh96fzlu.cloudfront.net/sudachidict-raw/20250515/small_lex.zip"
+        # ベースURL
+        local base_url="https://d2ej7fkh96fzlu.cloudfront.net/sudachidict-raw/20250515"
         
-        # 解凍（上書き確認なし）
-        unzip -o -q "${temp_file}" -d "${japanese_dir}"
+        # 各辞書ファイルの処理
+        echo "  🔽 Sudachi辞書データをダウンロード中..."
         
-        # CSVファイルから単語を抽出（1列目が表層形、2列目が左文脈ID、3列目が右文脈ID...）
-        echo "  🔄 辞書データを処理中..."
-        
-        # small_lex.csv の1列目（表層形）を抽出してテスト用・ベンチマーク用作成
-        if [ ! -f "${japanese_dir}/small_lex.csv" ]; then
-            echo "  ❌ エラー: small_lex.csv が見つかりません"
-            echo "     ダウンロードまたは解凍に失敗した可能性があります"
-            exit 1
+        # small_lex.zip（基本語彙、約40MB）
+        if [ ! -f "${small_words}" ]; then
+            echo "    📥 small_lex.zip をダウンロード中..."
+            curl -L -o "${japanese_dir}/small_lex.zip" "${base_url}/small_lex.zip"
+            unzip -o -q "${japanese_dir}/small_lex.zip" -d "${japanese_dir}"
+            cut -d',' -f1 "${japanese_dir}/small_lex.csv" | grep -v '^$' | sort -u > "${small_words}"
+            echo "    ✅ small_lex: $(wc -l < "${small_words}")語"
         fi
         
-        # CSVの1列目（表層形）を抽出、重複削除、空行除去
-        cut -d',' -f1 "${japanese_dir}/small_lex.csv" | \
-            grep -v '^$' | \
-            sort -u > "${japanese_dir}/temp_words.txt"
+        # core_lex.zip（追加語彙、約21MB）
+        if [ ! -f "${core_words}" ]; then
+            echo "    📥 core_lex.zip をダウンロード中..."
+            curl -L -o "${japanese_dir}/core_lex.zip" "${base_url}/core_lex.zip"
+            unzip -o -q "${japanese_dir}/core_lex.zip" -d "${japanese_dir}"
+            cut -d',' -f1 "${japanese_dir}/core_lex.csv" | grep -v '^$' | sort -u > "${core_words}"
+            echo "    ✅ core_lex: $(wc -l < "${core_words}")語"
+        fi
         
-        # 小規模テスト用（1000語）- 漢字で始まる単語のみ
-        grep -P '^[\x{4e00}-\x{9fa5}]' "${japanese_dir}/temp_words.txt" | \
-            head -1000 > "${test_file}"
+        # notcore_lex.zip（専門語彙、約35MB）
+        if [ ! -f "${notcore_words}" ]; then
+            echo "    📥 notcore_lex.zip をダウンロード中..."
+            curl -L -o "${japanese_dir}/notcore_lex.zip" "${base_url}/notcore_lex.zip"
+            unzip -o -q "${japanese_dir}/notcore_lex.zip" -d "${japanese_dir}"
+            cut -d',' -f1 "${japanese_dir}/notcore_lex.csv" | grep -v '^$' | sort -u > "${notcore_words}"
+            echo "    ✅ notcore_lex: $(wc -l < "${notcore_words}")語"
+        fi
         
-        # 全データ用（ベンチマーク用）
-        cp "${japanese_dir}/temp_words.txt" "${bench_file}"
+        # 全辞書統合（重複削除）
+        echo "  🔄 全辞書データを統合中..."
+        sort -u "${small_words}" "${core_words}" "${notcore_words}" > "${full_words}"
+        echo "  ✅ 統合辞書: $(wc -l < "${full_words}")語"
         
-        # 一時ファイル削除
-        #rm -f "${temp_file}" "${japanese_dir}/small_lex.csv" "${japanese_dir}/temp_words.txt"
+        # テスト用ファイル作成（1000語）- 漢字で始まる単語のみ
+        if [ ! -f "${test_file}" ]; then
+            echo "  🔄 テスト用データを作成中..."
+            grep -P '^[\x{4e00}-\x{9fa5}]' "${small_words}" | head -1000 > "${test_file}"
+            echo "    ✅ テスト用: $(wc -l < "${test_file}")語"
+        fi
         
         echo "  ✅ 日本語辞書データを準備完了"
         echo "    - テスト用: $(wc -l < "${test_file}")語"
-        echo "    - ベンチマーク用: $(wc -l < "${bench_file}")語"
+        echo "    - Small辞書: $(wc -l < "${small_words}")語"
+        echo "    - Core辞書: $(wc -l < "${core_words}")語"
+        echo "    - NotCore辞書: $(wc -l < "${notcore_words}")語"
+        echo "    - Full辞書: $(wc -l < "${full_words}")語"
     else
         echo "  ✅ 日本語辞書データは既に存在します"
         echo "    - テスト用: $(wc -l < "${test_file}")語"
-        echo "    - ベンチマーク用: $(wc -l < "${bench_file}")語"
+        if [ -f "${small_words}" ]; then
+            echo "    - Small辞書: $(wc -l < "${small_words}")語"
+        fi
+        if [ -f "${core_words}" ]; then
+            echo "    - Core辞書: $(wc -l < "${core_words}")語"
+        fi
+        if [ -f "${notcore_words}" ]; then
+            echo "    - NotCore辞書: $(wc -l < "${notcore_words}")語"
+        fi
+        echo "    - Full辞書: $(wc -l < "${full_words}")語"
     fi
 }
 
